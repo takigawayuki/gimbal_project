@@ -23,11 +23,11 @@
 #include "usart.h"
 #include "gpio.h"
 
-
-
-/* Private includes -------------------------------------------------------，，，，，，，，，，，，，---*/
+/* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "ZhangDaTou.h"
+#include "common.h"
+#include "user_tim.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -98,6 +98,10 @@ int main(void)
   MX_TIM7_Init();
   /* USER CODE BEGIN 2 */
   ZDT_UART_RxStart();
+	HAL_Delay(100);
+  gimbal_init(); 
+	HAL_Delay(100);
+  User_TIM_Init(); 
 
   /* USER CODE END 2 */
 
@@ -105,8 +109,16 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+		// HAL_GPIO_WritePin(text_io_GPIO_Port,text_io_Pin,GPIO_PIN_SET);
 
-    ZhangDaTou_Task();
+		// HAL_GPIO_WritePin(text_io_GPIO_Port,text_io_Pin,GPIO_PIN_RESET);
+		// HAL_Delay(50);
+//		uint8_t text[8] = {11,22,33,44,55,66,77,88};
+//		HAL_UART_Transmit(&huart1, text, 16, 0xFFFF);
+//    ZhangDaTou_Task();
+		// uint8_t text[8] = {11,22,33,44,55,66,77,88};
+		// HAL_UART_Transmit(&huart6,text,8,0xff);
+		// HAL_Delay(100);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

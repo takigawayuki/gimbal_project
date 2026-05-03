@@ -1,21 +1,23 @@
 #include "ZhangDaTou.h"
-#include "Emm_V5.h"
+#include "X_V2.h"
 #include "usart.h"
 #include "string.h"
 ZDTMotor_Typedef pitchmotor={
 .huart = &huart1,
-.id =1,
+.id =2,
 .mod=1,
 .setSpeed =100,
+.setAcc = ZHANGDATOU_DEFAULT_ACC,
 .reduction_ratio = 1,
 .microStep =256,
 };
 ZDTMotor_Typedef yawmotor={
 .huart = &huart3,
-.id =2,
+.id =1,
 .mod=1,
 .reduction_ratio =1,
 .setSpeed =100,
+.setAcc = ZHANGDATOU_DEFAULT_ACC,
 .microStep =256,
 };
 
@@ -28,6 +30,26 @@ uint32_t swap_endian_32(uint32_t val) {
 uint16_t swap_endian_16(uint16_t val) {
     return ((val >> 8) & 0x00FF) |  // 移动高字节到低位
            ((val << 8) & 0xFF00);    // 移动低字节到高位
+}
+
+static float ZhangDaTou_GetReductionRatio(ZDTMotor_Typedef* object)
+{
+	return (object->reduction_ratio == 0) ? 1.0f : (float)object->reduction_ratio;
+}
+
+static float ZhangDaTou_DegPerSecToMotorRPM(ZDTMotor_Typedef* object, float deg_per_sec)
+{
+	return ABS(deg_per_sec) * ZhangDaTou_GetReductionRatio(object) / 6.0f;
+}
+
+static float ZhangDaTou_OutputDegToMotorDeg(ZDTMotor_Typedef* object, float output_deg)
+{
+	return ABS(output_deg) * ZhangDaTou_GetReductionRatio(object);
+}
+
+static uint16_t ZhangDaTou_GetAcc(ZDTMotor_Typedef* object)
+{
+	return (object->setAcc == 0) ? ZHANGDATOU_DEFAULT_ACC : object->setAcc;
 }
 
 void ZhangDaTou_DataParm(uint8_t* Data,ZDTMotor_Typedef* object)
@@ -50,7 +72,7 @@ void ZhangDaTou_DataParm(uint8_t* Data,ZDTMotor_Typedef* object)
 						sign =1;
 					}
 					memcpy(&temp, &Data[3], sizeof(uint16_t));
-					object->Speed = swap_endian_16(temp)*sign*6;
+					object->Speed = (float)swap_endian_16(temp) * 0.1f * 6.0f / ZhangDaTou_GetReductionRatio(object) * sign;
 				}
 				break;
 			case 0x36://位置
@@ -67,7 +89,7 @@ void ZhangDaTou_DataParm(uint8_t* Data,ZDTMotor_Typedef* object)
 						sign =1;
 					}
 					memcpy(&temp, &Data[3], sizeof(uint32_t));
-					object->Position=swap_endian_32(temp)*360.0f/65536.0f/object->reduction_ratio *sign;
+					object->Position = (float)swap_endian_32(temp) * 0.1f / ZhangDaTou_GetReductionRatio(object) * sign;
 				}
 				break;
 			default:
@@ -78,46 +100,42 @@ void ZhangDaTou_DataParm(uint8_t* Data,ZDTMotor_Typedef* object)
 
 void ZhangDaTou_Control(ZDTMotor_Typedef* object)
 {
+	if (object->huart == NULL) {
+		object->huart = &huart1;
+	}
+	if (object->setAcc == 0) {
+		object->setAcc = ZHANGDATOU_DEFAULT_ACC;
+	}
+
 	if(object->mod==0)//速度模式
 	{
-		if(object->setSpeed>0)
-		{
-			Emm_V5_Vel_Control(object->huart, object->id,0,(uint16_t)(object->setSpeed/6.0f),0,0);
-		}
-		else
-		{
-			Emm_V5_Vel_Control(object->huart, object->id,1,(uint16_t)(-object->setSpeed/6.0f),0,0);
-		}
-	}	
+		uint8_t dir = (object->setSpeed >= 0.0f) ? 0 : 1;
+		float vel_rpm = ZhangDaTou_DegPerSecToMotorRPM(object, object->setSpeed);
+		X_V2_Vel_Control_UART(object->huart, object->id, dir, ZhangDaTou_GetAcc(object), vel_rpm, 0);
+	}
 	else//速度位置模式
 	{
-		if(object->setSpeed<0)
-		{
-			object->setSpeed = -object->setSpeed;
-		}
-		if(object->setPosition>=0)
-		{
-			Emm_V5_Pos_Control(object->huart, object->id,0,(uint16_t)(object->setSpeed/6.0f),0,(uint32_t)(object->setPosition*(3200.0f*object->microStep/16*object->reduction_ratio)/360.0f),true,0);
-		}
-		else
-		{
-			Emm_V5_Pos_Control(object->huart, object->id,1,(uint16_t)(object->setSpeed/6.0f),0,(uint32_t)(-object->setPosition*(3200.0f*object->microStep/16*object->reduction_ratio)/360.0f),true,0);
-		}
+		uint8_t dir = (object->setPosition >= 0.0f) ? 0 : 1;
+		float vel_rpm = ZhangDaTou_DegPerSecToMotorRPM(object, object->setSpeed);
+		float pos_deg = ZhangDaTou_OutputDegToMotorDeg(object, object->setPosition);
+		X_V2_Traj_Pos_Control_UART(object->huart, object->id, dir, ZhangDaTou_GetAcc(object), ZhangDaTou_GetAcc(object), vel_rpm, pos_deg, 1, 0);
 	}
 }
 
 //速度模式控制
-void ZhangDaTou_Speedctr(ZDTMotor_Typedef* object,float SpeedVal)
+void ZhangDaTou_Speedctr(ZDTMotor_Typedef* object,float SpeedVal,uint16_t AccVal)
 {
 	object->mod = 0;
 	object->setSpeed = SpeedVal;
+	object->setAcc = (AccVal == 0) ? ZHANGDATOU_DEFAULT_ACC : AccVal;
 }	
 //速度位置控制
-void ZhangDaTou_PositionSpeedctr(ZDTMotor_Typedef* object,float SpeedVal,float PositionVal)
+void ZhangDaTou_PositionSpeedctr(ZDTMotor_Typedef* object,float SpeedVal,float PositionVal,uint16_t AccVal)
 {
 	object->mod = 1;
 	object->setSpeed = SpeedVal;
 	object->setPosition = PositionVal;
+	object->setAcc = (AccVal == 0) ? ZHANGDATOU_DEFAULT_ACC : AccVal;
 }
 //获取速度
 float ZhangDaTou_getSpeedDate(ZDTMotor_Typedef* object)
@@ -136,15 +154,22 @@ void ZhangDaTou_init(ZDTMotor_Typedef* object,uint8_t id)
 	if (object->huart == NULL) {
 		object->huart = &huart1;
 	}
+	if (object->setAcc == 0) {
+		object->setAcc = ZHANGDATOU_DEFAULT_ACC;
+	}
 }
 void ZhangDaTou_SetUart(ZDTMotor_Typedef* object, UART_HandleTypeDef *huart)
 {
 	object->huart = huart;
 }
+void ZhangDaTou_SetAcc(ZDTMotor_Typedef* object,uint16_t AccVal)
+{
+	object->setAcc = (AccVal == 0) ? ZHANGDATOU_DEFAULT_ACC : AccVal;
+}
 //任务函数
 void ZhangDaTou_Task()
 {	
-	ZhangDaTou_Control(&pitchmotor);//控制电机1
-	ZhangDaTou_Control(&yawmotor);//控制电机2
+	// ZhangDaTou_Control(&pitchmotor);//控制电机1
+	// ZhangDaTou_Control(&yawmotor);//控制电机2
 }
 

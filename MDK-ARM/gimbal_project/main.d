@@ -35,4 +35,8 @@ gimbal_project\main.o: ../Core/Inc/dma.h
 gimbal_project\main.o: ../Core/Inc/tim.h
 gimbal_project\main.o: ../Core/Inc/usart.h
 gimbal_project\main.o: ../Core/Inc/gpio.h
-gimbal_project\main.o: ..\user\hardware\42\ZhangDaTou.h
+gimbal_project\main.o: ../user/hardware/42/ZhangDaTou.h
+gimbal_project\main.o: ../user/app/common.h
+gimbal_project\main.o: D:\Software\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
+gimbal_project\main.o: D:\Software\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h
+gimbal_project\main.o: ../user/bsp/user_tim.h

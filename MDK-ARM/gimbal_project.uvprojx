@@ -313,7 +313,7 @@
           </ArmAdsMisc>
           <Cads>
             <interw>1</interw>
-            <Optim>2</Optim>
+            <Optim>1</Optim>
             <oTime>0</oTime>
             <SplitLS>0</SplitLS>
             <OneElfS>1</OneElfS>
@@ -339,7 +339,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32F405xx</Define>
               <Undefine></Undefine>
-              <IncludePath>../Core/Inc;C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/STM32F4xx_HAL_Driver/Inc;C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/STM32F4xx_HAL_Driver/Inc/Legacy;C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/CMSIS/Device/ST/STM32F4xx/Include;C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/CMSIS/Include;..\user\bsp;..\user\hardware\42;..\user\app</IncludePath>
+              <IncludePath>../Core/Inc;C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/STM32F4xx_HAL_Driver/Inc;C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/STM32F4xx_HAL_Driver/Inc/Legacy;C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/CMSIS/Device/ST/STM32F4xx/Include;C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/CMSIS/Include;../user/bsp;../user/hardware/42;../user/app</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -534,6 +534,11 @@
               <FilePath>..\user\bsp\user_tim.c</FilePath>
             </File>
             <File>
+              <FileName>user_tim.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\user\bsp\user_tim.h</FilePath>
+            </File>
+            <File>
               <FileName>user_usart.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\user\bsp\user_usart.c</FilePath>
@@ -549,16 +554,6 @@
           <GroupName>hardware</GroupName>
           <Files>
             <File>
-              <FileName>Emm_V5.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\user\hardware\42\Emm_V5.c</FilePath>
-            </File>
-            <File>
-              <FileName>Emm_V5.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\user\hardware\42\Emm_V5.h</FilePath>
-            </File>
-            <File>
               <FileName>ZhangDaTou.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\user\hardware\42\ZhangDaTou.c</FilePath>
@@ -568,20 +563,45 @@
               <FileType>5</FileType>
               <FilePath>..\user\hardware\42\ZhangDaTou.h</FilePath>
             </File>
+            <File>
+              <FileName>X_V2.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\user\hardware\42\X_V2.c</FilePath>
+            </File>
+            <File>
+              <FileName>X_V2.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\user\hardware\42\X_V2.h</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
           <GroupName>app</GroupName>
           <Files>
             <File>
-              <FileName>common.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>..\user\app\common.h</FilePath>
+              <FileName>gimbal_ctrl.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\user\app\gimbal_ctrl.c</FilePath>
+            </File>
+            <File>
+              <FileName>gimbal_calc.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\user\app\gimbal_calc.c</FilePath>
+            </File>
+            <File>
+              <FileName>gimbal_drv.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\user\app\gimbal_drv.c</FilePath>
             </File>
             <File>
               <FileName>pid_drv.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\user\app\pid_drv.c</FilePath>
+            </File>
+            <File>
+              <FileName>common.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\user\app\common.h</FilePath>
             </File>
           </Files>
         </Group>

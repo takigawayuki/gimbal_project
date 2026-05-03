@@ -33,6 +33,6 @@ gimbal_project\zhangdatou.o: C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F
 gimbal_project\zhangdatou.o: C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h
 gimbal_project\zhangdatou.o: C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h
 gimbal_project\zhangdatou.o: ../Core/Inc/usart.h
-gimbal_project\zhangdatou.o: ..\user\hardware\42\Emm_V5.h
+gimbal_project\zhangdatou.o: ..\user\hardware\42\X_V2.h
 gimbal_project\zhangdatou.o: D:\Software\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h
 gimbal_project\zhangdatou.o: D:\Software\Keil_v5\ARM\ARMCC\Bin\..\include\string.h

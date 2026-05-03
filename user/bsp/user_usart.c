@@ -1,11 +1,17 @@
 #include "user_usart.h"
 #include "ZhangDaTou.h"
+#include <string.h>
+
+extern void camera_data_update(float dx, float dy);
 
 #define ZDT_UART_RX_BUF_SIZE 64
+#define VISION_FRAME_SIZE 11
 
 static uint8_t zdt_uart1_rx_buf[ZDT_UART_RX_BUF_SIZE];
 static uint8_t zdt_uart3_rx_buf[ZDT_UART_RX_BUF_SIZE];
+static uint8_t vision_uart6_rx_buf[ZDT_UART_RX_BUF_SIZE];
 
+// 开启DMA空闲中断接收
 static void ZDT_UART_StartReceive(UART_HandleTypeDef *huart, uint8_t *rx_buf)
 {
 	if (HAL_UARTEx_ReceiveToIdle_DMA(huart, rx_buf, ZDT_UART_RX_BUF_SIZE) == HAL_OK) {
@@ -13,6 +19,7 @@ static void ZDT_UART_StartReceive(UART_HandleTypeDef *huart, uint8_t *rx_buf)
 	}
 }
 
+// 判断电机串口
 static void ZDT_UART_ParseMotorFrame(UART_HandleTypeDef *huart, uint8_t *data)
 {
 	if (pitchmotor.huart == huart) {
@@ -59,19 +66,54 @@ static void ZDT_UART_ParseFeedback(UART_HandleTypeDef *huart, uint8_t *data, uin
 
 }
 
+// 解析视觉数据帧
+static void Vision_UART_ParseData(uint8_t *data, uint16_t size)
+{
+	uint16_t index = 0;
+
+	while ((index + VISION_FRAME_SIZE) <= size) {
+		if (data[index] == 0xAA && data[index + 1] == 0x55) {
+			uint8_t checksum = 0;
+			for (int i = 2; i < 10; i++) {
+				checksum += data[index + i];
+			}
+
+			if (checksum == data[index + 10]) {
+				float dx, dy;
+				memcpy(&dx, &data[index + 2], sizeof(float));
+				memcpy(&dy, &data[index + 6], sizeof(float));
+
+				camera_data_update(dx, dy);
+				return;
+			}
+		}
+		index++;
+	}
+}
+
+// 启动接收
 void ZDT_UART_RxStart(void)
 {
 	ZDT_UART_StartReceive(&huart1, zdt_uart1_rx_buf);
 	ZDT_UART_StartReceive(&huart3, zdt_uart3_rx_buf);
+	ZDT_UART_StartReceive(&huart6, vision_uart6_rx_buf);
 }
 
+// UART接收完成回调
 void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
 {
-	if (huart->Instance == USART1) {
+	if (huart->Instance == USART1)
+	{
 		ZDT_UART_ParseFeedback(huart, zdt_uart1_rx_buf, Size);
 		ZDT_UART_StartReceive(&huart1, zdt_uart1_rx_buf);
-	} else if (huart->Instance == USART3) {
+	} else if (huart->Instance == USART3)
+	{
 		ZDT_UART_ParseFeedback(huart, zdt_uart3_rx_buf, Size);
 		ZDT_UART_StartReceive(&huart3, zdt_uart3_rx_buf);
+	} 
+	else if (huart->Instance == USART6)
+	{
+		Vision_UART_ParseData(vision_uart6_rx_buf, Size);
+		ZDT_UART_StartReceive(&huart6, vision_uart6_rx_buf);
 	}
 }

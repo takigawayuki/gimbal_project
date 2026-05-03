@@ -65,17 +65,23 @@
 **/
 typedef struct
 {
+    //计数器
     uint32_t sys_cnt;
     uint32_t camera_y_pid_cnt;
     uint32_t camera_x_pid_cnt;
 
+    //周期
+    float sys_fs;
     float sys_ts;
+    float camera_y_pid_fs; 
     float camera_y_pid_ts;
+    float camera_x_pid_fs;
     float camera_x_pid_ts;
 
-    uint8_t sys_ts_cnt_val; 
-    uint8_t camera_y_pid_ts_cnt_val;
-    uint8_t camera_x_pid_ts_cnt_val;
+    //计数值
+    uint32_t sys_ts_cnt_val; 
+    uint32_t camera_y_pid_cnt_val;
+    uint32_t camera_x_pid_cnt_val;
 
 } period_t;
 
@@ -118,7 +124,7 @@ typedef struct
 
 typedef struct 
 {
-  float camera_x_pid;
+  float camera_x;
   float camera_y;
 
   float gimbal_pitch;
@@ -129,7 +135,7 @@ typedef struct
 {
   float pitch_set;
   float yaw_set;
-  float camera_x_pid_set;
+  float camera_x_set;
   float camera_y_set;
 }gimbal_ctrl_t;
 
@@ -145,11 +151,19 @@ typedef struct
 
 extern sys_t sys;
 
+/*** gimbal_ctrl.c ***/
+void gimbal_task_state(void);
+
+
 /*** gimbal_calc.c ***/
+void camera_data_update(float dx, float dy);
+
 
 /*** gimbal_drv.c ***/
+void gimbal_init(void);
+void camera_y_pid_ctrl(sys_t *sys, float ref_value);
+void camera_x_pid_ctrl(sys_t *sys, float ref_value);
 
-/*** gimbal_ctrl.c ***/
 
 /*** pid_drv.c ***/
 float parallel_pid_ctrl(pid_para_t *pid, float ref_value, float fdback_value);
