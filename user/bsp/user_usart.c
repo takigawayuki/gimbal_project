@@ -11,11 +11,47 @@ static uint8_t zdt_uart1_rx_buf[ZDT_UART_RX_BUF_SIZE];
 static uint8_t zdt_uart3_rx_buf[ZDT_UART_RX_BUF_SIZE];
 static uint8_t vision_uart6_rx_buf[ZDT_UART_RX_BUF_SIZE];
 
+volatile uint32_t dbg_uart1_error_cnt = 0;
+volatile uint32_t dbg_uart3_error_cnt = 0;
+volatile uint32_t dbg_uart6_error_cnt = 0;
+volatile uint32_t dbg_uart_last_error = 0;
+
 // 开启DMA空闲中断接收
 static void ZDT_UART_StartReceive(UART_HandleTypeDef *huart, uint8_t *rx_buf)
 {
 	if (HAL_UARTEx_ReceiveToIdle_DMA(huart, rx_buf, ZDT_UART_RX_BUF_SIZE) == HAL_OK) {
 		__HAL_DMA_DISABLE_IT(huart->hdmarx, DMA_IT_HT);
+	}
+}
+
+static void ZDT_UART_ClearError(UART_HandleTypeDef *huart)
+{
+	__HAL_UART_CLEAR_PEFLAG(huart);
+	__HAL_UART_CLEAR_FEFLAG(huart);
+	__HAL_UART_CLEAR_NEFLAG(huart);
+	__HAL_UART_CLEAR_OREFLAG(huart);
+	__HAL_UART_CLEAR_IDLEFLAG(huart);
+}
+
+static void ZDT_UART_RecoverReceive(UART_HandleTypeDef *huart)
+{
+	dbg_uart_last_error = huart->ErrorCode;
+
+	ZDT_UART_ClearError(huart);
+	HAL_UART_AbortReceive(huart);
+
+	if (huart->Instance == USART1)
+	{
+		dbg_uart1_error_cnt++;
+		ZDT_UART_StartReceive(&huart1, zdt_uart1_rx_buf);
+	} else if (huart->Instance == USART3)
+	{
+		dbg_uart3_error_cnt++;
+		ZDT_UART_StartReceive(&huart3, zdt_uart3_rx_buf);
+	} else if (huart->Instance == USART6)
+	{
+		dbg_uart6_error_cnt++;
+		ZDT_UART_StartReceive(&huart6, vision_uart6_rx_buf);
 	}
 }
 
@@ -117,3 +153,10 @@ void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
 		ZDT_UART_StartReceive(&huart6, vision_uart6_rx_buf);
 	}
 }
+
+void HAL_UART_ErrorCallback(UART_HandleTypeDef *huart)
+{
+	ZDT_UART_RecoverReceive(huart);
+}
+
+

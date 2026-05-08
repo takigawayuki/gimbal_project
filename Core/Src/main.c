@@ -97,11 +97,28 @@ int main(void)
   MX_USART6_UART_Init();
   MX_TIM7_Init();
   /* USER CODE BEGIN 2 */
+
   ZDT_UART_RxStart();
 	HAL_Delay(100);
-  gimbal_init(); 
+  gimbal_init();
 	HAL_Delay(100);
-  User_TIM_Init(); 
+
+  // ZhangDaTou_Enable(&pitchmotor, 0);    // 失能
+  // HAL_Delay(5);
+  // ZhangDaTou_Enable(&yawmotor, 0);      // 失能
+  // HAL_Delay(5);
+  
+  ZhangDaTou_Enable(&pitchmotor, 1);       // 使能
+  HAL_Delay(5);
+  ZhangDaTou_Enable(&yawmotor, 1);         // 使能
+  HAL_Delay(5);
+
+  ZhangDaTou_StartPosFeedback(&pitchmotor, 5);
+  HAL_Delay(50);
+  ZhangDaTou_StartPosFeedback(&yawmotor, 5);
+  HAL_Delay(50);
+
+  User_TIM_Init();
 
   /* USER CODE END 2 */
 
@@ -110,15 +127,23 @@ int main(void)
   while (1)
   {
 		// HAL_GPIO_WritePin(text_io_GPIO_Port,text_io_Pin,GPIO_PIN_SET);
-
+    // camera_x_pid_ctrl(&sys, 0.0f);
+    // camera_y_pid_ctrl(&sys, 0.0f);
 		// HAL_GPIO_WritePin(text_io_GPIO_Port,text_io_Pin,GPIO_PIN_RESET);
 		// HAL_Delay(50);
-//		uint8_t text[8] = {11,22,33,44,55,66,77,88};
-//		HAL_UART_Transmit(&huart1, text, 16, 0xFFFF);
-//    ZhangDaTou_Task();
+
+	// 	uint8_t text[8] = {11,22,33,44,55,66,77,88};
+	// 	HAL_UART_Transmit(&huart1, text, 16, 0xFFFF);
+  //  ZhangDaTou_Task();
+
 		// uint8_t text[8] = {11,22,33,44,55,66,77,88};
 		// HAL_UART_Transmit(&huart6,text,8,0xff);
 		// HAL_Delay(100);
+
+    // HAL_GPIO_WritePin(GPIOC,GPIO_PIN_14,GPIO_PIN_SET);
+
+
+
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

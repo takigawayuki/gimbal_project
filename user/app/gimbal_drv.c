@@ -30,29 +30,30 @@ void period_init(void)
 void pid_init(void)
 {
     //pitch
-    sys.camera_y_pid.kp = 0.0f;
+    sys.camera_y_pid.kp = +1.2f;
     sys.camera_y_pid.ki = 0.0f;
     sys.camera_y_pid.kd = 0.0f;
-    sys.camera_y_pid.out_max = 10.0f;
-    sys.camera_y_pid.out_min = -10.0f;
+    sys.camera_y_pid.out_max = 15.0f;
+    sys.camera_y_pid.out_min = -15.0f;
     sys.camera_y_pid.i_term_max = 10.0f;
     sys.camera_y_pid.i_term_min = -10.0f;
     sys.camera_y_pid.ts = sys.period.camera_y_pid_ts;
     sys.camera_y_pid.i_isolate_flag = 0U;
 
     //yaw
-    sys.camera_x_pid.kp = 0.0f;
+    sys.camera_x_pid.kp = +1.2f;
     sys.camera_x_pid.ki = 0.0f;
     sys.camera_x_pid.kd = 0.0f;
-    sys.camera_x_pid.out_max = 10.0f;
-    sys.camera_x_pid.out_min = -10.0f;
+    sys.camera_x_pid.out_max = 15.0f;
+    sys.camera_x_pid.out_min = -15.0f;
     sys.camera_x_pid.i_term_max = 10.0f;
     sys.camera_x_pid.i_term_min = -10.0f;
     sys.camera_x_pid.ts = sys.period.camera_x_pid_ts;
     sys.camera_x_pid.i_isolate_flag = 0U;
 }
 
-
+#define PITCH_MAX       50.0f
+#define PITCH_MIN      -30.0f
 void camera_y_pid_ctrl(sys_t *sys , float ref_value) 
 {
    if(++sys->period.camera_y_pid_cnt >= sys->period.camera_y_pid_cnt_val)
@@ -63,11 +64,23 @@ void camera_y_pid_ctrl(sys_t *sys , float ref_value)
 
     //张大头电机控制
     float motor_speed = sys->camera_y_pid.out_value;
-    ZhangDaTou_Speedctr(&pitchmotor, motor_speed, 1000);  
+
+   // 限制俯仰角在安全范围内，防止过度旋转导致机械损伤
+    if ((pitchmotor.Position > PITCH_MAX && motor_speed > 0.0f) ||
+        (pitchmotor.Position < PITCH_MIN && motor_speed < 0.0f)) 
+    {
+        ZhangDaTou_Speedctr(&pitchmotor, 0.0f, 0);
+    }
+    else
+    {
+        ZhangDaTou_Speedctr(&pitchmotor, motor_speed, 1000); 
+    }
+     
     ZhangDaTou_Control(&pitchmotor);
 }
 
-
+#define YAW_MAX       50.0f
+#define YAW_MIN      -50.0f
 void camera_x_pid_ctrl(sys_t *sys , float ref_value) 
 {
    if(++sys->period.camera_x_pid_cnt >= sys->period.camera_x_pid_cnt_val)
@@ -78,6 +91,18 @@ void camera_x_pid_ctrl(sys_t *sys , float ref_value)
 
     //张大头电机控制
     float motor_speed = sys->camera_x_pid.out_value;
+
+    // // 限制偏航角在安全范围内，防止过度旋转导致机械损伤
+    // if ((yawmotor.Position > YAW_MAX && motor_speed > 0.0f) ||
+    //     (yawmotor.Position < YAW_MIN && motor_speed < 0.0f)) 
+    // {
+    //     ZhangDaTou_Speedctr(&yawmotor, 0.0f, 0);
+    // }
+    // else
+    // {
+    //     ZhangDaTou_Speedctr(&yawmotor, motor_speed, 1000); 
+    // }
+
     ZhangDaTou_Speedctr(&yawmotor, motor_speed, yawmotor.setAcc);
     ZhangDaTou_Control(&yawmotor);
 }

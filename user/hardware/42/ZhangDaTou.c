@@ -8,14 +8,14 @@ ZDTMotor_Typedef pitchmotor={
 .mod=1,
 .setSpeed =100,
 .setAcc = ZHANGDATOU_DEFAULT_ACC,
-.reduction_ratio = 1,
+.reduction_ratio = 6,
 .microStep =256,
 };
 ZDTMotor_Typedef yawmotor={
 .huart = &huart3,
 .id =1,
 .mod=1,
-.reduction_ratio =1,
+.reduction_ratio = 6,
 .setSpeed =100,
 .setAcc = ZHANGDATOU_DEFAULT_ACC,
 .microStep =256,
@@ -172,4 +172,29 @@ void ZhangDaTou_Task()
 	// ZhangDaTou_Control(&pitchmotor);//控制电机1
 	// ZhangDaTou_Control(&yawmotor);//控制电机2
 }
+void ZhangDaTou_StartPosFeedback(ZDTMotor_Typedef* object, uint16_t interval_ms)
+{
+	uint8_t i = 0;
+	static uint8_t cmd[8];
 
+	cmd[i++] = object->id;
+	cmd[i++] = 0x11;
+	cmd[i++] = 0x18;
+	cmd[i++] = 0x36;
+	cmd[i++] = (uint8_t)(interval_ms >> 8);
+	cmd[i++] = (uint8_t)(interval_ms & 0xFF);
+	cmd[i++] = 0x6B;
+
+	HAL_UART_Transmit_DMA(object->huart, cmd, i);
+}
+void ZhangDaTou_Enable(ZDTMotor_Typedef* object, uint8_t state)
+{
+	uint8_t cmd[6];
+	cmd[0] = object->id;
+	cmd[1] = 0xF3;
+	cmd[2] = 0xAB;
+	cmd[3] = state;
+	cmd[4] = 0x00;
+	cmd[5] = 0x6B;
+	HAL_UART_Transmit_DMA(object->huart, cmd, 6);
+}

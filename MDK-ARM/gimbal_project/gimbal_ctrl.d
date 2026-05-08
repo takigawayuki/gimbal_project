@@ -34,3 +34,6 @@ gimbal_project\gimbal_ctrl.o: C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_
 gimbal_project\gimbal_ctrl.o: C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h
 gimbal_project\gimbal_ctrl.o: D:\Software\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 gimbal_project\gimbal_ctrl.o: D:\Software\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h
+gimbal_project\gimbal_ctrl.o: ../user/hardware/42/ZhangDaTou.h
+gimbal_project\gimbal_ctrl.o: ../Core/Inc/usart.h
+gimbal_project\gimbal_ctrl.o: D:\Software\Keil_v5\ARM\ARMCC\Bin\..\include\math.h

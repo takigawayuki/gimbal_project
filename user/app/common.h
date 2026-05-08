@@ -129,6 +129,9 @@ typedef struct
 
   float gimbal_pitch;
   float gimbal_yaw;
+
+  float distance;
+
 }gimbal_value_t;
 
 typedef struct 
@@ -151,8 +154,35 @@ typedef struct
 
 extern sys_t sys;
 
+
+// 云台状态机状态枚举
+typedef enum
+{
+    GIMBAL_IDLE = 0,  // 待机，等待按键启动，电机停，激光关
+    GIMBAL_SEARCH,  // 找靶，激光关
+    GIMBAL_TRACK,   // 跟踪，摄像头十字对准靶心，激光关
+    GIMBAL_LOCK     // 锁定，激光开
+} gimbal_state;
+
+// 云台状态机变量
+typedef struct
+{
+  gimbal_state state;           // 0-待机，1-找靶，2-跟踪，3-锁定
+  uint32_t search_timeout_cnt;  // 找靶超时计数器
+  uint32_t aim_stable_cnt;      // 对准稳定计数器
+  int8_t scan_dir;            // 扫描方向，1和-1
+} gimbal_sm_t;
+
+extern gimbal_sm_t gimbal_sm_obj;
+extern volatile uint32_t target_lost_cnt;
+
 /*** gimbal_ctrl.c ***/
+uint8_t key_scan(void);
+uint8_t target_found(void);
+uint8_t target_stable(void);
+void gimbal_sm(void);
 void gimbal_task_state(void);
+
 
 
 /*** gimbal_calc.c ***/

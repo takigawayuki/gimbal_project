@@ -1,0 +1,23 @@
+
+按键	动作
+鼠标左键	点击激光实际落点，记录坐标
+1	把当前平滑面积设为 REFERENCE_AREA_PIXELS（靶板在 1500mm 处时按）
+2	把点击点 Y 设为 LASER_Y_MIN_DISTANCE（500mm 处时按）
+3	把点击点 Y 设为 LASER_Y_MAX_DISTANCE（1500mm 处时按）
+4	把点击点 X 设为 LASER_X_FIXED（如果激光水平偏移也需要标定）
+s	保存当前帧到 /tmp/
+q	退出，打印最终参数
+
+
+
+
+最远距离：1350mm
+"REFERENCE_AREA_PIXELS": 7461,
+
+最近距离：790mm
+"LASER_Y_MIN_DISTANCE": 215,
+"LASER_X_FIXED": 330
+
+最远距离：1350mm
+LASER_Y_MAX_DISTANCE = 222
+"LASER_X_FIXED": 331

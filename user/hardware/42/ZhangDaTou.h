@@ -14,7 +14,7 @@ typedef struct
 	float setPosition;		//deg
 	uint16_t setAcc;		//RPM/s
 	float Speed;
-	float Position;
+	float Position;			//deg£¨½Ç¶È£©
 	uint8_t ready;
 	uint32_t microStep;
 	uint32_t reduction_ratio;//¼õËÙ±È
@@ -44,4 +44,8 @@ void ZhangDaTou_SetAcc(ZDTMotor_Typedef* object,uint16_t AccVal);
 
 
 void ZhangDaTou_Control(ZDTMotor_Typedef* object);
+void ZhangDaTou_StartPosFeedback(ZDTMotor_Typedef* object, uint16_t interval_ms);
+
+void ZhangDaTou_Enable(ZDTMotor_Typedef* object, uint8_t state);
+
 #endif
