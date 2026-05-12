@@ -101,7 +101,7 @@ int main(void)
   ZDT_UART_RxStart();
 	HAL_Delay(100);
   gimbal_init();
-	HAL_Delay(100);
+	HAL_Delay(500);
 
   // ZhangDaTou_Enable(&pitchmotor, 0);    // Ê§ÄÜ
   // HAL_Delay(5);
@@ -119,6 +119,11 @@ int main(void)
   HAL_Delay(50);
 
   User_TIM_Init();
+
+  key_init();
+  menu_init();
+
+
 
   /* USER CODE END 2 */
 
@@ -141,8 +146,6 @@ int main(void)
 		// HAL_Delay(100);
 
     // HAL_GPIO_WritePin(GPIOC,GPIO_PIN_14,GPIO_PIN_SET);
-
-
 
     /* USER CODE END WHILE */
 

@@ -61,8 +61,10 @@ void Error_Handler(void);
 #define text_io_GPIO_Port GPIOC
 #define laser_Pin GPIO_PIN_14
 #define laser_GPIO_Port GPIOC
-#define key_Pin GPIO_PIN_4
-#define key_GPIO_Port GPIOA
+#define key2_Pin GPIO_PIN_3
+#define key2_GPIO_Port GPIOC
+#define key1_Pin GPIO_PIN_4
+#define key1_GPIO_Port GPIOA
 
 /* USER CODE BEGIN Private defines */
 

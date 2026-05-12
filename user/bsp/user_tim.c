@@ -1,15 +1,26 @@
 #include "user_tim.h"
 #include "common.h"
 
+//#include "key.c"
+
 // #include "ZhangDaTou.h"
 
 // int key_1 = 0;
 
 extern TIM_HandleTypeDef htim7;
 
+// extern volatile uint8_t target_valid;
+extern volatile uint32_t target_lost_cnt;
+
 // #define KEY_ON 1
 // #define KEY_OFF 0
 // uint8_t key_scan(void);
+
+
+//test
+volatile uint32_t key_menu_cnt  = 0;
+volatile uint32_t key_enter_cnt = 0;
+
 
 void User_TIM_Init(void)
 {
@@ -20,10 +31,14 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
     if (htim->Instance == TIM7)
     {
-        // target_lost_cnt++;
+        if (target_lost_cnt < 500)
+            target_lost_cnt++;
+        // if (target_lost_cnt >= 100)
+        //     target_valid = 0; // 100ms 没新数据 → 判丢失
 
         // gimbal_sm();
-        gimbal_task_state();  // 每 1ms 执行一次
+
+        // gimbal_task_state(); // 每 1ms 执行一次
 
         // if (key_scan() == KEY_ON)
         // {
@@ -51,5 +66,27 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
         //         HAL_GPIO_WritePin(GPIOC, GPIO_PIN_14, GPIO_PIN_SET);
         //     }
         // }
+
+        key_event_t ev_menu = key_update(&key_menu);
+        key_event_t ev_enter = key_update(&key_enter);
+
+        // if (ev_menu == KEY_EVENT_SHORT)
+        //     HAL_GPIO_TogglePin(text_io_GPIO_Port, text_io_Pin);
+
+        // if (ev_enter == KEY_EVENT_SHORT)
+        //     HAL_GPIO_TogglePin(laser_GPIO_Port, laser_Pin);
+
+        // test
+        // if (ev_menu == KEY_EVENT_SHORT)
+        //     key_menu_cnt++;
+        // if (ev_enter == KEY_EVENT_SHORT)
+        //     key_enter_cnt++;
+
+        menu_update(ev_menu, ev_enter);
+
+        gimbal_task_state(); // 每 1ms 执行一次
+
+
+
     }
 }

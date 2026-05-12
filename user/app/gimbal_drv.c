@@ -41,9 +41,9 @@ void pid_init(void)
     sys.camera_y_pid.i_isolate_flag = 0U;
 
     //yaw
-    sys.camera_x_pid.kp = +1.2f;
+    sys.camera_x_pid.kp = +1.15f;
     sys.camera_x_pid.ki = 0.0f;
-    sys.camera_x_pid.kd = 0.0f;
+    sys.camera_x_pid.kd = 0.48f;
     sys.camera_x_pid.out_max = 15.0f;
     sys.camera_x_pid.out_min = -15.0f;
     sys.camera_x_pid.i_term_max = 10.0f;

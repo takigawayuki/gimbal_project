@@ -599,6 +599,16 @@
               <FilePath>..\user\app\pid_drv.c</FilePath>
             </File>
             <File>
+              <FileName>key.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\user\app\key.c</FilePath>
+            </File>
+            <File>
+              <FileName>menu.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\user\app\menu.c</FilePath>
+            </File>
+            <File>
               <FileName>common.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\user\app\common.h</FilePath>

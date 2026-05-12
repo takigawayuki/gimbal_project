@@ -32,6 +32,8 @@
 "gimbal_project\gimbal_calc.o"
 "gimbal_project\gimbal_drv.o"
 "gimbal_project\pid_drv_1.o"
+"gimbal_project\key.o"
+"gimbal_project\menu.o"
 --strict --scatter "gimbal_project\gimbal_project.sct"
 --summary_stderr --info summarysizes --map --load_addr_map_info --xref --callgraph --symbols
 --info sizes --info totals --info unused --info veneers
