@@ -160,7 +160,8 @@ typedef enum
 {
   GIMBAL_IDLE = 0, // 待机，等待按键启动，电机停，激光关
   GIMBAL_SEARCH,   // 找靶，激光关
-  GIMBAL_TRACK,    // 跟踪，摄像头十字对准靶心，激光关
+  GIMBAL_STATIC_TRACK,    
+  GIMBAL_DYNAMIC_TRACK, 
 } gimbal_state;
 
 // 云台状态机变量

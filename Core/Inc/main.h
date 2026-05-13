@@ -65,6 +65,10 @@ void Error_Handler(void);
 #define key2_GPIO_Port GPIOC
 #define key1_Pin GPIO_PIN_4
 #define key1_GPIO_Port GPIOA
+#define MPU9250_SCL_Pin GPIO_PIN_4
+#define MPU9250_SCL_GPIO_Port GPIOC
+#define MPU9250_SDA_Pin GPIO_PIN_5
+#define MPU9250_SDA_GPIO_Port GPIOC
 
 /* USER CODE BEGIN Private defines */
 

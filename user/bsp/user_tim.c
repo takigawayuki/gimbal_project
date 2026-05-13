@@ -1,13 +1,15 @@
 #include "user_tim.h"
 #include "common.h"
+#include "mpu9250_app.h"
 
-//#include "key.c"
+// #include "key.c"
 
 // #include "ZhangDaTou.h"
 
 // int key_1 = 0;
 
 extern TIM_HandleTypeDef htim7;
+extern TIM_HandleTypeDef htim8;
 
 // extern volatile uint8_t target_valid;
 extern volatile uint32_t target_lost_cnt;
@@ -16,15 +18,14 @@ extern volatile uint32_t target_lost_cnt;
 // #define KEY_OFF 0
 // uint8_t key_scan(void);
 
-
-//test
-volatile uint32_t key_menu_cnt  = 0;
+// test
+volatile uint32_t key_menu_cnt = 0;
 volatile uint32_t key_enter_cnt = 0;
-
 
 void User_TIM_Init(void)
 {
     HAL_TIM_Base_Start_IT(&htim7); // 启动 TIM7 中断
+    HAL_TIM_Base_Start_IT(&htim8); // TIM8 10ms 中断，给 MPU9250 预留的
 }
 
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
@@ -87,6 +88,9 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
         gimbal_task_state(); // 每 1ms 执行一次
 
 
-
+    }
+    else if (htim->Instance == TIM8)
+    {
+        MPU9250_Update10ms();
     }
 }

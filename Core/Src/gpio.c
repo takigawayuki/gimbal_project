@@ -51,10 +51,13 @@ void MX_GPIO_Init(void)
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOC, text_io_Pin|laser_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOC, text_io_Pin|laser_Pin|MPU9250_SCL_Pin, GPIO_PIN_RESET);
 
-  /*Configure GPIO pins : text_io_Pin laser_Pin */
-  GPIO_InitStruct.Pin = text_io_Pin|laser_Pin;
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(MPU9250_SDA_GPIO_Port, MPU9250_SDA_Pin, GPIO_PIN_SET);
+
+  /*Configure GPIO pins : text_io_Pin laser_Pin MPU9250_SCL_Pin MPU9250_SDA_Pin */
+  GPIO_InitStruct.Pin = text_io_Pin|laser_Pin|MPU9250_SCL_Pin|MPU9250_SDA_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
