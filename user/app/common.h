@@ -155,11 +155,20 @@ typedef struct
 
 extern sys_t sys;
 
+
+/**
+***********************************************************************
+* @brief 云台状态机参数结构体
+* @note
+***********************************************************************
+**/
 // 云台状态机状态枚举
 typedef enum
 {
   GIMBAL_IDLE = 0, // 待机，等待按键启动，电机停，激光关
-  GIMBAL_SEARCH,   // 找靶，激光关
+  // GIMBAL_SEARCH,   
+  GIMBAL_SEARCH_LEFT, 
+  GIMBAL_SEARCH_RIGHT,
   GIMBAL_STATIC_TRACK,    
   GIMBAL_DYNAMIC_TRACK, 
 } gimbal_state;
@@ -170,12 +179,19 @@ typedef struct
   gimbal_state state;          // 当前状态
   uint32_t search_timeout_cnt; // 找靶超时计数器
   uint32_t aim_stable_cnt;     // 对准稳定计数器
-  int8_t scan_dir;             // 扫描方向，1和-1
+  // int8_t scan_dir;             // 扫描方向，1和-1
 } gimbal_sm_t;
 
 extern gimbal_sm_t gimbal_sm_obj;
 extern volatile uint32_t target_lost_cnt;
+extern volatile uint8_t aim_stable_frames;
 
+/**
+***********************************************************************
+* @brief 按键参数结构体
+* @note
+***********************************************************************
+**/
 // 按键
 typedef enum
 {
@@ -194,11 +210,20 @@ typedef struct
 extern key_t key_menu;  // PA4，用来切菜单项
 extern key_t key_enter; // PC3，用来确认/退出
 
+
+/**
+***********************************************************************
+* @brief 菜单参数结构体
+* @note
+***********************************************************************
+**/
 // 菜单
 typedef enum
 {
   MENU_ITEM_STANDBY = 0,   // 待机（对应基础1）
-  MENU_ITEM_TRACK_STATIC,  // 静态跟随（对应基础2、发挥1）
+  // MENU_ITEM_TRACK_STATIC,  // 静态跟随（对应基础2、发挥1）
+  MENU_ITEM_TRACK_STATIC_LEFT,    // ← 原 MENU_ITEM_TRACK_STATIC 改名/拆分
+  MENU_ITEM_TRACK_STATIC_RIGHT,   // ← 新加
   MENU_ITEM_TRACK_DYNAMIC, // 动态跟随（对应基础3、发挥2）
   MENU_ITEM_COUNT          // 哨兵，方便循环取模
 } menu_item_t;
@@ -213,7 +238,7 @@ typedef struct
 extern menu_t menu;
 
 
-
+/* ========== 函数声明 ========== */
 /*** gimbal_ctrl.c ***/
 // uint8_t key_scan(void);
 // uint8_t target_found(void);

@@ -4,9 +4,11 @@
 
 // #define SEARCH_TIMEOUT 5000 // 假设找靶超时时间为5000ms
 
-#define AIM_STABLE_CNT 150  // 连续 150 次稳 → 开
+#define AIM_STABLE_CNT 150  // 1ms tick 计数，连续 150 次稳 → 开 
+#define AIM_STABLE_FRAMES 5   // 连续 5 帧稳定才开激光
+
 #define AIM_UNSTABLE_CNT 20 // 连续 20 次不稳才关
-#define AIM_THRESHOLD 10.0f // 允许误差（像素）
+#define AIM_THRESHOLD 5.0f // 允许误差（像素）
 
 // #define LASER_K 0.0f
 // #define LASER_B 0.0f
@@ -14,10 +16,12 @@
 #define LOST_BACK_TO_SEARCH_CNT 300 // 连续 300ms 丢靶 → 回搜索
 
 sys_t sys;
-gimbal_sm_t gimbal_sm_obj = {GIMBAL_IDLE, 0, 0, -1};
+// gimbal_sm_t gimbal_sm_obj = {GIMBAL_IDLE, 0, 0, 1};
+gimbal_sm_t gimbal_sm_obj = {GIMBAL_IDLE, 0, 0};
 
 volatile uint32_t target_lost_cnt = 0;
 // volatile uint8_t target_valid = 0;
+volatile uint8_t aim_stable_frames = 0;
 
 static uint16_t stable_cnt = 0;
 static uint16_t unstable_cnt = 0;
@@ -333,50 +337,96 @@ void gimbal_task_state(void)
         // 动作：停电机 + 关激光。每 tick 都踩一次，保证干净
         ZhangDaTou_Speedctr(&yawmotor, 0.0f, yawmotor.setAcc);
         ZhangDaTou_Control(&yawmotor);
+        ZhangDaTou_Speedctr(&pitchmotor, 0.0f, pitchmotor.setAcc);
+        ZhangDaTou_Control(&pitchmotor);
         HAL_GPIO_WritePin(laser_GPIO_Port, laser_Pin, GPIO_PIN_RESET);
         stable_cnt = 0;
         unstable_cnt = 0;
         laser_on = 0;
         break;
 
-    case GIMBAL_SEARCH:
+    case GIMBAL_SEARCH_LEFT:
         // 转移：看到目标 → TRACK
         if (sys.value.camera_x != 0)
         {
             // gimbal_sm_obj.state = GIMBAL_TRACK;
             // 从这里分流
-            if (menu.cur_item == MENU_ITEM_TRACK_STATIC)
-                gimbal_sm_obj.state = GIMBAL_STATIC_TRACK;
-            else
-                gimbal_sm_obj.state = GIMBAL_DYNAMIC_TRACK;
+            // if (menu.cur_item == MENU_ITEM_TRACK_STATIC)
+            //     gimbal_sm_obj.state = GIMBAL_STATIC_TRACK;
+            // else
+            //     gimbal_sm_obj.state = GIMBAL_DYNAMIC_TRACK;
+
+            // if (menu.cur_item == MENU_ITEM_TRACK_DYNAMIC)
+            //     gimbal_sm_obj.state = GIMBAL_DYNAMIC_TRACK;
+            // else
+            //     gimbal_sm_obj.state = GIMBAL_STATIC_TRACK;
+
+            gimbal_sm_obj.state = GIMBAL_STATIC_TRACK;
+
             break; // 这一 tick 不执行 SEARCH 动作，下 tick 走 TRACK
         }
         // 动作：匀速扫描 + 激光关
-        ZhangDaTou_Speedctr(&yawmotor,
-                            80.0f * gimbal_sm_obj.scan_dir,
-                            2000);
+        // ZhangDaTou_Speedctr(&yawmotor,
+        //                     80.0f * gimbal_sm_obj.scan_dir,
+        //                     2000);
+        ZhangDaTou_Speedctr(&yawmotor, -80.0f, 2000);
+        ZhangDaTou_Control(&yawmotor);
+        HAL_GPIO_WritePin(laser_GPIO_Port, laser_Pin, GPIO_PIN_RESET);
+        break;
+
+    case GIMBAL_SEARCH_RIGHT:
+        // 转移：看到目标 → TRACK
+        if (sys.value.camera_x != 0)
+        {
+            // gimbal_sm_obj.state = GIMBAL_TRACK;
+            // 从这里分流
+            // if (menu.cur_item == MENU_ITEM_TRACK_STATIC)
+            //     gimbal_sm_obj.state = GIMBAL_STATIC_TRACK;
+            // else
+            //     gimbal_sm_obj.state = GIMBAL_DYNAMIC_TRACK;
+
+            // if (menu.cur_item == MENU_ITEM_TRACK_DYNAMIC)
+            //     gimbal_sm_obj.state = GIMBAL_DYNAMIC_TRACK;
+            // else
+            //     gimbal_sm_obj.state = GIMBAL_STATIC_TRACK;
+
+            gimbal_sm_obj.state = GIMBAL_STATIC_TRACK;
+
+            break; // 这一 tick 不执行 SEARCH 动作，下 tick 走 TRACK
+        }
+        // 动作：匀速扫描 + 激光关
+        // ZhangDaTou_Speedctr(&yawmotor,
+        //                     80.0f * gimbal_sm_obj.scan_dir,
+        //                     2000);
+        ZhangDaTou_Speedctr(&yawmotor, +80.0f, 2000);
         ZhangDaTou_Control(&yawmotor);
         HAL_GPIO_WritePin(laser_GPIO_Port, laser_Pin, GPIO_PIN_RESET);
         break;
 
     case GIMBAL_STATIC_TRACK:
         // 转移：丢失超过阈值 → SEARCH
-        if (sys.value.camera_x == 0 && sys.value.camera_y == 0)
-        {
-            if (target_lost_cnt >= LOST_BACK_TO_SEARCH_CNT)
-            {
-                gimbal_sm_obj.state = GIMBAL_SEARCH;
-                HAL_GPIO_WritePin(laser_GPIO_Port, laser_Pin, GPIO_PIN_RESET);
-                stable_cnt = 0;
-                unstable_cnt = 0;
-                laser_on = 0;
-                break;
-            }
-        }
-        else
-        {
-            target_lost_cnt = 0; // 有目标就清零
-        }
+        // if (sys.value.camera_x == 0 && sys.value.camera_y == 0)
+        // {
+        //     if (target_lost_cnt >= LOST_BACK_TO_SEARCH_CNT)  // 如果target_lost_cnt等于零，证明有摄像头有数据，如果不等于零，就证明没有数据，那就跳回到扫靶状态
+        //     {
+        //         // gimbal_sm_obj.state = GIMBAL_SEARCH_LEFT;
+
+        //         if (menu.cur_item == MENU_ITEM_TRACK_STATIC_LEFT)
+        //             gimbal_sm_obj.state = GIMBAL_SEARCH_LEFT;
+        //         else
+        //             gimbal_sm_obj.state = GIMBAL_SEARCH_RIGHT;
+
+        //         HAL_GPIO_WritePin(laser_GPIO_Port, laser_Pin, GPIO_PIN_RESET);
+        //         stable_cnt = 0;
+        //         unstable_cnt = 0;
+        //         laser_on = 0;
+        //         break;
+        //     }
+        // }
+        // else
+        // {
+        //     target_lost_cnt = 0; // 有目标就清零
+        // }
         // 动作：PID + 激光
         camera_x_pid_ctrl(&sys, 0.0f);
         camera_y_pid_ctrl(&sys, 0.0f);
@@ -385,13 +435,20 @@ void gimbal_task_state(void)
         if (target_stable())
         {
             unstable_cnt = 0;
-            if (stable_cnt < AIM_STABLE_CNT)
-                stable_cnt++;
-            if (stable_cnt >= AIM_STABLE_CNT && !laser_on)
+            // if (stable_cnt < AIM_STABLE_CNT)
+            //     stable_cnt++;
+            // if (stable_cnt >= AIM_STABLE_CNT && !laser_on)
+            // {
+            //     HAL_GPIO_WritePin(laser_GPIO_Port, laser_Pin, GPIO_PIN_SET);
+            //     laser_on = 1;
+            // }
+
+            if (aim_stable_frames >= AIM_STABLE_FRAMES && !laser_on)
             {
                 HAL_GPIO_WritePin(laser_GPIO_Port, laser_Pin, GPIO_PIN_SET);
                 laser_on = 1;
             }
+
         }
         else
         {

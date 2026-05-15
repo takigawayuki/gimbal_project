@@ -142,8 +142,18 @@ int main(void)
     // HAL_GPIO_WritePin(text_io_GPIO_Port,text_io_Pin,GPIO_PIN_RESET);
     // HAL_Delay(50);
 
-    // 	uint8_t text[8] = {11,22,33,44,55,66,77,88};
-    // 	HAL_UART_Transmit(&huart1, text, 16, 0xFFFF);
+    // uint8_t text[8] = {11,22,33,44,55,66,77,88};
+    // HAL_UART_Transmit(&huart6, text, 8, 0xFFFF); 
+    // HAL_Delay(100);
+
+    uint8_t rx_byte;
+    if (HAL_UART_Receive(&huart6, &rx_byte, 1, 10) == HAL_OK)
+    {
+      HAL_UART_Transmit(&huart6, &rx_byte, 1, 0xFFFF);
+    }
+    HAL_Delay(100);
+
+
     //  ZhangDaTou_Task();
 
     // uint8_t text[8] = {11,22,33,44,55,66,77,88};

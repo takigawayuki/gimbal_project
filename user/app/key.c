@@ -3,16 +3,14 @@
 key_t key_menu;
 key_t key_enter;
 
-
-
 void key_init(void)
 {
     key_menu.port  = GPIOA;
-    key_menu.pin   = GPIO_PIN_4;
-    key_menu.last_level = 1;   // 初始认为是松开（高电平）
+    key_menu.pin   = GPIO_PIN_4;    // 菜单按键
+    key_menu.last_level = 1;        // 初始认为是松开（高电平）
 
     key_enter.port = GPIOC;
-    key_enter.pin  = GPIO_PIN_3;
+    key_enter.pin  = GPIO_PIN_3;    // 功能运行退出按键
     key_enter.last_level = 1;
 }
 

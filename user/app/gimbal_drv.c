@@ -30,7 +30,7 @@ void period_init(void)
 void pid_init(void)
 {
     //pitch
-    sys.camera_y_pid.kp = +1.2f;
+    sys.camera_y_pid.kp = +1.0f;
     sys.camera_y_pid.ki = 0.0f;
     sys.camera_y_pid.kd = 0.0f;
     sys.camera_y_pid.out_max = 15.0f;
@@ -41,7 +41,7 @@ void pid_init(void)
     sys.camera_y_pid.i_isolate_flag = 0U;
 
     //yaw
-    sys.camera_x_pid.kp = +1.2f;
+    sys.camera_x_pid.kp = +1.0f;
     sys.camera_x_pid.ki = 0.0f;
     sys.camera_x_pid.kd = 0.0f;
     sys.camera_x_pid.out_max = 15.0f;
