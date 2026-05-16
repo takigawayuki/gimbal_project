@@ -5,7 +5,7 @@
 // #define SEARCH_TIMEOUT 5000 // 假设找靶超时时间为5000ms
 
 #define AIM_STABLE_CNT 150  // 1ms tick 计数，连续 150 次稳 → 开 
-#define AIM_STABLE_FRAMES 5   // 连续 5 帧稳定才开激光
+#define AIM_STABLE_FRAMES 6   // 连续 5 帧稳定才开激光
 
 #define AIM_UNSTABLE_CNT 20 // 连续 20 次不稳才关
 #define AIM_THRESHOLD 5.0f // 允许误差（像素）

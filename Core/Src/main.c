@@ -60,7 +60,7 @@ void SystemClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
+    uint8_t rx_byte;
 /* USER CODE END 0 */
 
 /**
@@ -105,10 +105,10 @@ int main(void)
   gimbal_init();
   HAL_Delay(500);
 
-  while (MPU9250_UserInit() != 0U)
-  {
-    HAL_Delay(100);
-  }
+  // while (MPU9250_UserInit() != 0U)
+  // {
+  //   HAL_Delay(100);
+  // }
 
   // ZhangDaTou_Enable(&pitchmotor, 0);
   // HAL_Delay(5);
@@ -142,22 +142,22 @@ int main(void)
     // HAL_GPIO_WritePin(text_io_GPIO_Port,text_io_Pin,GPIO_PIN_RESET);
     // HAL_Delay(50);
 
-    // uint8_t text[8] = {11,22,33,44,55,66,77,88};
-    // HAL_UART_Transmit(&huart6, text, 8, 0xFFFF); 
-    // HAL_Delay(100);
+//    uint8_t text[8] = {11,22,33,44,55,66,77,88};
+//    HAL_UART_Transmit(&huart3, text, 8, 0xFFFF); 
+//    HAL_Delay(100);
 
-    uint8_t rx_byte;
-    if (HAL_UART_Receive(&huart6, &rx_byte, 1, 10) == HAL_OK)
-    {
-      HAL_UART_Transmit(&huart6, &rx_byte, 1, 0xFFFF);
-    }
-    HAL_Delay(100);
+
+    //  if (HAL_UART_Receive(&huart3, &rx_byte, 1, 10) == HAL_OK)
+    //  {
+    //    HAL_UART_Transmit(&huart3, &rx_byte, 1, 0xFFFF);
+    //  }
+    //  HAL_Delay(100);
 
 
     //  ZhangDaTou_Task();
 
     // uint8_t text[8] = {11,22,33,44,55,66,77,88};
-    // HAL_UART_Transmit(&huart6,text,8,0xff);
+    // HAL_UART_Transmit(&huart6, text, 8, 0xff);
     // HAL_Delay(100);
 
     // HAL_GPIO_WritePin(GPIOC,GPIO_PIN_14,GPIO_PIN_SET);
