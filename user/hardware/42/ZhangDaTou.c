@@ -7,6 +7,7 @@ ZDTMotor_Typedef pitchmotor={
 .id =2,
 .mod=1,
 .setSpeed =100,
+.setPosition = 0.0f,
 .setAcc = ZHANGDATOU_DEFAULT_ACC,
 .reduction_ratio = 6,
 .microStep =256,
@@ -15,9 +16,10 @@ ZDTMotor_Typedef yawmotor={
 .huart = &huart3,
 .id =1,
 .mod=1,
-.reduction_ratio = 6,
 .setSpeed =100,
+.setPosition = 0.0f,
 .setAcc = ZHANGDATOU_DEFAULT_ACC,
+.reduction_ratio = 6,
 .microStep =256,
 };
 

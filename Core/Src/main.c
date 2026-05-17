@@ -60,7 +60,7 @@ void SystemClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-    uint8_t rx_byte;
+uint8_t rx_byte;
 /* USER CODE END 0 */
 
 /**
@@ -90,7 +90,7 @@ int main(void)
 
   /* USER CODE END SysInit */
 
-  /* Initialize all configured peripherals */
+  /* Initialize all configured 00peripherals */
   MX_GPIO_Init();
   MX_DMA_Init();
   MX_USART1_UART_Init();
@@ -142,10 +142,9 @@ int main(void)
     // HAL_GPIO_WritePin(text_io_GPIO_Port,text_io_Pin,GPIO_PIN_RESET);
     // HAL_Delay(50);
 
-//    uint8_t text[8] = {11,22,33,44,55,66,77,88};
-//    HAL_UART_Transmit(&huart3, text, 8, 0xFFFF); 
-//    HAL_Delay(100);
-
+    //    uint8_t text[8] = {11,22,33,44,55,66,77,88};
+    //    HAL_UART_Transmit(&huart3, text, 8, 0xFFFF);
+    //    HAL_Delay(100);
 
     //  if (HAL_UART_Receive(&huart3, &rx_byte, 1, 10) == HAL_OK)
     //  {
@@ -153,14 +152,13 @@ int main(void)
     //  }
     //  HAL_Delay(100);
 
-
     //  ZhangDaTou_Task();
 
     // uint8_t text[8] = {11,22,33,44,55,66,77,88};
     // HAL_UART_Transmit(&huart6, text, 8, 0xff);
     // HAL_Delay(100);
 
-    // HAL_GPIO_WritePin(GPIOC,GPIO_PIN_14,GPIO_PIN_SET);
+    HAL_GPIO_WritePin(GPIOC,GPIO_PIN_14,GPIO_PIN_SET);
 
     /* USER CODE END WHILE */
 

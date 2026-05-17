@@ -35,4 +35,5 @@ gimbal_project\user_tim.o: C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_
 gimbal_project\user_tim.o: ../user/app/common.h
 gimbal_project\user_tim.o: D:\Software\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 gimbal_project\user_tim.o: D:\Software\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h
-gimbal_project\user_tim.o: ..\user\hardware\MPU9250\mpu9250_app.h
+gimbal_project\user_tim.o: ../user/hardware/42/ZhangDaTou.h
+gimbal_project\user_tim.o: ../Core/Inc/usart.h
