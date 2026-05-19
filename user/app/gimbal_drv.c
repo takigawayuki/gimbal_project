@@ -4,6 +4,20 @@
 void period_init(void);
 void pid_init(void);
 
+static uint8_t gimbal_pid_base_ready = 0U;
+static float yaw_pid_base_pos = 0.0f;
+static float pitch_pid_base_pos = 0.0f;
+
+static void gimbal_pid_base_update_once(void)
+{
+    if (!gimbal_pid_base_ready)
+    {
+        yaw_pid_base_pos = yawmotor.Position;
+        pitch_pid_base_pos = pitchmotor.Position;
+        gimbal_pid_base_ready = 1U;
+    }
+}
+
 void gimbal_init(void)
 {
     period_init();
@@ -29,24 +43,24 @@ void period_init(void)
 void pid_init(void)
 {
     // pitch
-    sys.camera_y_pid.kp = +0.005f;
-    sys.camera_y_pid.ki = +0.00027f;
+    sys.camera_y_pid.kp = 0.040f;
+    sys.camera_y_pid.ki = 5.0f;
     sys.camera_y_pid.kd = 0.0f;
-    sys.camera_y_pid.out_max = 15.0f;
-    sys.camera_y_pid.out_min = -15.0f;
-    sys.camera_y_pid.i_term_max = 10.0f;
-    sys.camera_y_pid.i_term_min = -10.0f;
+    sys.camera_y_pid.out_max = 200.0f;
+    sys.camera_y_pid.out_min = -200.0f;
+    sys.camera_y_pid.i_term_max = 150.0f;
+    sys.camera_y_pid.i_term_min = -150.0f;
     sys.camera_y_pid.ts = sys.period.camera_y_pid_ts;
     sys.camera_y_pid.i_isolate_flag = 0U;
 
     // yaw
-    sys.camera_x_pid.kp = +0.012f;
-    sys.camera_x_pid.ki = +0.026f; 
-    sys.camera_x_pid.kd = 0.0f;
-    sys.camera_x_pid.out_max = 20.0f;
-    sys.camera_x_pid.out_min = -20.0f;
-    sys.camera_x_pid.i_term_max = 10.0f;
-    sys.camera_x_pid.i_term_min = -10.0f;
+    sys.camera_x_pid.kp = -0.011f;
+    sys.camera_x_pid.ki = 5.0f; 
+    sys.camera_x_pid.kd = 0.008f;
+    sys.camera_x_pid.out_max = 200.0f;
+    sys.camera_x_pid.out_min = -200.0f;
+    sys.camera_x_pid.i_term_max = 150.0f;
+    sys.camera_x_pid.i_term_min = -150.0f;
     sys.camera_x_pid.ts = sys.period.camera_x_pid_ts;
     sys.camera_x_pid.i_isolate_flag = 0U;
 }
@@ -57,6 +71,8 @@ extern float pitch_pos;
 
 void camera_y_pid_ctrl(sys_t *sys, float ref_value)
 {
+    gimbal_pid_base_update_once();
+
     if (++sys->period.camera_y_pid_cnt >= sys->period.camera_y_pid_cnt_val)
     {
         sys->period.camera_y_pid_cnt = 0;
@@ -84,12 +100,17 @@ void camera_y_pid_ctrl(sys_t *sys, float ref_value)
     //     ZhangDaTou_Control(&pitchmotor);
 
     // 张大头电机控制
-    float pos_delta = -sys->camera_y_pid.out_value;
-    float pitch_goal = pitch_pos + pos_delta;
+    float pos_delta = sys->camera_y_pid.out_value;  // 位置模式PID的输出是角度的修正量，单位是deg
+    float pitch_goal = pitch_pid_base_pos + pos_delta;
 
     // 限制俯仰角在安全范围内，防止过度旋转导致机械损伤
-    if ((pitchmotor.Position > PITCH_MAX && pos_delta > 0.0f) ||
-        (pitchmotor.Position < PITCH_MIN && pos_delta < 0.0f))
+    if (pitch_goal > PITCH_MAX)
+        pitch_goal = PITCH_MAX;
+    else if (pitch_goal < PITCH_MIN)
+        pitch_goal = PITCH_MIN;
+
+    if ((pitchmotor.Position > PITCH_MAX && pitch_goal > pitchmotor.Position) ||
+        (pitchmotor.Position < PITCH_MIN && pitch_goal < pitchmotor.Position))
     {
         // ZhangDaTou_Speedctr(&pitchmotor, 0.0f, 0);
         ZhangDaTou_PositionSpeedctr(&pitchmotor, pitchmotor.setSpeed, 0.0f, 0);
@@ -109,6 +130,8 @@ extern float yaw_pos;
 
 void camera_x_pid_ctrl(sys_t *sys, float ref_value)
 {
+    gimbal_pid_base_update_once();
+
     if (++sys->period.camera_x_pid_cnt >= sys->period.camera_x_pid_cnt_val)
     {
         sys->period.camera_x_pid_cnt = 0;
@@ -119,7 +142,7 @@ void camera_x_pid_ctrl(sys_t *sys, float ref_value)
     // 张大头电机控制
     // float motor_speed = sys->camera_x_pid.out_value;
 
-    float pos_delta = -sys->camera_x_pid.out_value;
+    float pos_delta = sys->camera_x_pid.out_value;
 
     // // 限制偏航角在安全范围内，防止过度旋转导致机械损伤
     // if ((yawmotor.Position > YAW_MAX && motor_speed > 0.0f) ||
@@ -133,7 +156,13 @@ void camera_x_pid_ctrl(sys_t *sys, float ref_value)
     // }
 
     // ZhangDaTou_Speedctr(&yawmotor, motor_speed, yawmotor.setAcc);
-    float yaw_goal = yaw_pos + pos_delta;
+    float yaw_goal = yaw_pid_base_pos + pos_delta;
+
+    // if (yaw_goal > YAW_MAX)
+    //     yaw_goal = YAW_MAX;
+    // else if (yaw_goal < YAW_MIN)
+    //     yaw_goal = YAW_MIN;
+
     ZhangDaTou_PositionSpeedctr(&yawmotor, yawmotor.setSpeed, yaw_goal, yawmotor.setAcc);
     ZhangDaTou_Control(&yawmotor);
 }

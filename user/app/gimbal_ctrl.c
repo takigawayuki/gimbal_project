@@ -4,11 +4,11 @@
 
 // #define SEARCH_TIMEOUT 5000 // 假设找靶超时时间为5000ms
 
-#define AIM_STABLE_CNT 150  // 1ms tick 计数，连续 150 次稳 → 开
+#define AIM_STABLE_CNT 300  // 1ms tick 计数，连续 300 次稳 → 开
 #define AIM_STABLE_FRAMES 5 // 连续 5 帧稳定才开激光
 
 #define AIM_UNSTABLE_CNT 20 // 连续 20 次不稳才关
-#define AIM_THRESHOLD 10.0f // 允许误差（像素）
+#define AIM_THRESHOLD 3.0f  // 允许误差（像素）
 
 // #define LASER_K 0.0f
 // #define LASER_B 0.0f
@@ -23,9 +23,9 @@ volatile uint32_t target_lost_cnt = 0;
 // volatile uint8_t target_valid = 0;
 volatile uint8_t aim_stable_frames = 0;
 
-static uint16_t stable_cnt = 0;
-static uint16_t unstable_cnt = 0;
-static uint8_t laser_on = 0;
+uint16_t stable_cnt = 0;
+uint16_t unstable_cnt = 0;
+uint8_t laser_on = 0;
 
 extern float yaw_pos;
 
@@ -69,6 +69,18 @@ uint8_t target_stable(void)
         fabs(sys.value.camera_y) < AIM_THRESHOLD)
         return 1;
     return 0;
+}
+
+static void gimbal_pid_ctrl_10ms(void)
+{
+    static uint16_t pid_test_cnt = 0;
+
+    if (++pid_test_cnt >= 10)
+    {
+        pid_test_cnt = 0;
+        camera_x_pid_ctrl(&sys, 0.0f);
+        camera_y_pid_ctrl(&sys, 0.0f);
+    }
 }
 
 // /*** 切换状态 ***/
@@ -332,177 +344,13 @@ uint8_t target_stable(void)
 
 void gimbal_task_state(void)
 {
+
     switch (gimbal_sm_obj.state)
     {
-    case GIMBAL_IDLE:
-        // 没有转移（转移全由菜单触发）
-        // 动作：停电机 + 关激光。每 tick 都踩一次，保证干净
+        case GIMBAL_IDLE:
+            // 没有转移（转移全由菜单触发）
+            // 动作：停电机 + 关激光。每 tick 都踩一次，保证干净
 
-        // 速度模式
-        // ZhangDaTou_Speedctr(&yawmotor, 0.0f, yawmotor.setAcc);
-        // ZhangDaTou_Control(&yawmotor);
-        // ZhangDaTou_Speedctr(&pitchmotor, 0.0f, pitchmotor.setAcc);
-        // ZhangDaTou_Control(&pitchmotor);
-
-        // 速度位置模式
-        ZhangDaTou_PositionSpeedctr(&yawmotor, yawmotor.setSpeed, 0.0f, yawmotor.setAcc);
-        ZhangDaTou_Control(&yawmotor);
-        ZhangDaTou_PositionSpeedctr(&pitchmotor, pitchmotor.setSpeed, 0.0f, pitchmotor.setAcc);
-        ZhangDaTou_Control(&pitchmotor);
-
-        HAL_GPIO_WritePin(laser_GPIO_Port, laser_Pin, GPIO_PIN_RESET);
-        stable_cnt = 0;
-        unstable_cnt = 0;
-        laser_on = 0;
-        break;
-
-    case GIMBAL_SEARCH_LEFT:
-        // 转移：看到目标 → TRACK
-        if (sys.value.camera_x != 0)
-        {
-            // gimbal_sm_obj.state = GIMBAL_TRACK;
-            // 从这里分流
-            // if (menu.cur_item == MENU_ITEM_TRACK_STATIC)
-            //     gimbal_sm_obj.state = GIMBAL_STATIC_TRACK;
-            // else
-            //     gimbal_sm_obj.state = GIMBAL_DYNAMIC_TRACK;
-
-            // if (menu.cur_item == MENU_ITEM_TRACK_DYNAMIC)
-            //     gimbal_sm_obj.state = GIMBAL_DYNAMIC_TRACK;
-            // else
-            //     gimbal_sm_obj.state = GIMBAL_STATIC_TRACK;
-
-            // 切状态前先停车
-            // yawmotor.setPosition = yaw_pos;
-
-            // ZhangDaTou_PositionSpeedctr(&yawmotor, yawmotor.setSpeed, yawmotor.setPosition, yawmotor.setAcc);
-            // ZhangDaTou_Control(&yawmotor);
-
-            gimbal_sm_obj.state = GIMBAL_STATIC_TRACK;
-            break; // 这一 tick 不执行 SEARCH 动作，下 tick 走 TRACK
-        }
-        // 动作：匀速扫描 + 激光关
-        // ZhangDaTou_Speedctr(&yawmotor,
-        //                     80.0f * gimbal_sm_obj.scan_dir,
-        //                     2000);
-
-        // 速度模式
-        ZhangDaTou_Speedctr(&yawmotor, -80.0f, 2000);
-        ZhangDaTou_Control(&yawmotor);
-
-        // 速度位置模式
-        // ZhangDaTou_PositionSpeedctr(&yawmotor, 50, -180.0f, yawmotor.setAcc);
-        // ZhangDaTou_Control(&yawmotor);
-
-        HAL_GPIO_WritePin(laser_GPIO_Port, laser_Pin, GPIO_PIN_RESET);
-        break;
-
-    case GIMBAL_SEARCH_RIGHT:
-        // 转移：看到目标 → TRACK
-        if (sys.value.camera_x != 0)
-        {
-            // gimbal_sm_obj.state = GIMBAL_TRACK;
-            // 从这里分流
-            // if (menu.cur_item == MENU_ITEM_TRACK_STATIC)
-            //     gimbal_sm_obj.state = GIMBAL_STATIC_TRACK;
-            // else
-            //     gimbal_sm_obj.state = GIMBAL_DYNAMIC_TRACK;
-
-            // if (menu.cur_item == MENU_ITEM_TRACK_DYNAMIC)
-            //     gimbal_sm_obj.state = GIMBAL_DYNAMIC_TRACK;
-            // else
-            //     gimbal_sm_obj.state = GIMBAL_STATIC_TRACK;
-
-            // 切状态前先停车
-            // yawmotor.setPosition = yaw_pos;
-
-            // ZhangDaTou_PositionSpeedctr(&yawmotor, yawmotor.setSpeed, yawmotor.setPosition, yawmotor.setAcc);
-            // ZhangDaTou_Control(&yawmotor);
-
-            gimbal_sm_obj.state = GIMBAL_STATIC_TRACK;
-            break; // 这一 tick 不执行 SEARCH 动作，下 tick 走 TRACK
-        }
-        // 动作：匀速扫描 + 激光关
-        // ZhangDaTou_Speedctr(&yawmotor,
-        //                     80.0f * gimbal_sm_obj.scan_dir,
-        //                     2000);
-
-        // 速度模式
-        ZhangDaTou_Speedctr(&yawmotor, +80.0f, 2000);
-        ZhangDaTou_Control(&yawmotor);
-
-        // 速度位置模式
-        // ZhangDaTou_PositionSpeedctr(&yawmotor, 50, +180.0f, yawmotor.setAcc);
-        // ZhangDaTou_Control(&yawmotor);
-
-        HAL_GPIO_WritePin(laser_GPIO_Port, laser_Pin, GPIO_PIN_RESET);
-        break;
-
-    case GIMBAL_STATIC_TRACK:
-        // 转移：丢失超过阈值 → SEARCH
-        // if (sys.value.camera_x == 0 && sys.value.camera_y == 0)
-        // {
-        //     if (target_lost_cnt >= LOST_BACK_TO_SEARCH_CNT)  // 如果target_lost_cnt等于零，证明有摄像头有数据，如果不等于零，就证明没有数据，那就跳回到扫靶状态
-        //     {
-        //         // gimbal_sm_obj.state = GIMBAL_SEARCH_LEFT;
-
-        //         if (menu.cur_item == MENU_ITEM_TRACK_STATIC_LEFT)
-        //             gimbal_sm_obj.state = GIMBAL_SEARCH_LEFT;
-        //         else
-        //             gimbal_sm_obj.state = GIMBAL_SEARCH_RIGHT;
-
-        //         HAL_GPIO_WritePin(laser_GPIO_Port, laser_Pin, GPIO_PIN_RESET);
-        //         stable_cnt = 0;
-        //         unstable_cnt = 0;
-        //         laser_on = 0;
-        //         break;
-        //     }
-        // }
-        // else
-        // {
-        //     target_lost_cnt = 0; // 有目标就清零
-        // }
-
-        // camera_x_pid_ctrl(&sys, 0.0f);
-        // camera_y_pid_ctrl(&sys, 0.0f);
-
-        // 激光控制：稳定够久才开，抖动够久才关
-        if (target_stable())
-        {
-            unstable_cnt = 0;
-            // if (stable_cnt < AIM_STABLE_CNT)
-            //     stable_cnt++;
-            // if (stable_cnt >= AIM_STABLE_CNT && !laser_on)
-            // {
-            //     HAL_GPIO_WritePin(laser_GPIO_Port, laser_Pin, GPIO_PIN_SET);
-            //     laser_on = 1;
-            // }
-
-            if (aim_stable_frames >= AIM_STABLE_FRAMES && !laser_on)
-            {
-                HAL_GPIO_WritePin(laser_GPIO_Port, laser_Pin, GPIO_PIN_SET);
-                laser_on = 1;
-
-                // 锁定瞬间冻结目标位置（只在这一帧记录一次）
-                yawmotor.setPosition = yawmotor.Position;
-                pitchmotor.setPosition = pitchmotor.Position;
-            }
-        }
-        else
-        {
-            stable_cnt = 0;
-            // if (unstable_cnt < AIM_UNSTABLE_CNT)
-            //     unstable_cnt++;
-            // if (unstable_cnt >= AIM_UNSTABLE_CNT && laser_on)
-            // {
-            //     HAL_GPIO_WritePin(laser_GPIO_Port, laser_Pin, GPIO_PIN_RESET);
-            //     laser_on = 0;
-            // }
-        }
-
-        // if(laser_on == 1 && menu.cur_item == MENU_ITEM_TRACK_STATIC)
-        if (laser_on)
-        {
             // 速度模式
             // ZhangDaTou_Speedctr(&yawmotor, 0.0f, yawmotor.setAcc);
             // ZhangDaTou_Control(&yawmotor);
@@ -510,87 +358,255 @@ void gimbal_task_state(void)
             // ZhangDaTou_Control(&pitchmotor);
 
             // 速度位置模式
-            // ZhangDaTou_PositionSpeedctr(&yawmotor, yawmotor.setSpeed, 0.0f, yawmotor.setAcc);
-            // ZhangDaTou_Control(&yawmotor);
-            // ZhangDaTou_PositionSpeedctr(&pitchmotor, pitchmotor.setSpeed, 0.0f, pitchmotor.setAcc);
-            // ZhangDaTou_Control(&pitchmotor);
-
-            // 已锁定：保持锁定瞬间记录的位置，速度沿用配置的 setSpeed，PID 不跑
-            ZhangDaTou_PositionSpeedctr(&yawmotor, yawmotor.setSpeed, yawmotor.setPosition, yawmotor.setAcc);
+            ZhangDaTou_PositionSpeedctr(&yawmotor, yawmotor.setSpeed, 0.0f, yawmotor.setAcc);
             ZhangDaTou_Control(&yawmotor);
-            ZhangDaTou_PositionSpeedctr(&pitchmotor, pitchmotor.setSpeed, pitchmotor.setPosition, pitchmotor.setAcc);
+            ZhangDaTou_PositionSpeedctr(&pitchmotor, pitchmotor.setSpeed, 0.0f, pitchmotor.setAcc);
             ZhangDaTou_Control(&pitchmotor);
-        }
-        else
-        {
-            camera_x_pid_ctrl(&sys, 0.0f);
-            camera_y_pid_ctrl(&sys, 0.0f);
-        }
-        break;
 
-    case GIMBAL_DYNAMIC_TRACK:
-        // 转移：丢失超过阈值 → SEARCH
-        // if (sys.value.camera_x == 0 && sys.value.camera_y == 0)
-        // {
-        //     if (target_lost_cnt >= LOST_BACK_TO_SEARCH_CNT)
-        //     {
-        //         gimbal_sm_obj.state = GIMBAL_SEARCH;
-        //         HAL_GPIO_WritePin(laser_GPIO_Port, laser_Pin, GPIO_PIN_RESET);
-        //         stable_cnt = 0;
-        //         unstable_cnt = 0;
-        //         laser_on = 0;
-        //         break;
-        //     }
-        // }
-        // else
-        // {
-        //     target_lost_cnt = 0; // 有目标就清零
-        // }
-
-        camera_x_pid_ctrl(&sys, 0.0f);
-        camera_y_pid_ctrl(&sys, 0.0f);
-
-        // 激光控制：稳定够久才开，抖动够久才关
-        if (target_stable())
-        {
-            unstable_cnt = 0;
-            if (stable_cnt < AIM_STABLE_CNT)
-                stable_cnt++;
-            if (stable_cnt >= AIM_STABLE_CNT && !laser_on)
-            {
-                HAL_GPIO_WritePin(laser_GPIO_Port, laser_Pin, GPIO_PIN_SET);
-                laser_on = 1;
-            }
-        }
-        else
-        {
+            HAL_GPIO_WritePin(laser_GPIO_Port, laser_Pin, GPIO_PIN_RESET);
             stable_cnt = 0;
-            // if (unstable_cnt < AIM_UNSTABLE_CNT)
-            //     unstable_cnt++;
-            // if (unstable_cnt >= AIM_UNSTABLE_CNT && laser_on)
+            unstable_cnt = 0;
+            laser_on = 0;
+            break;
+
+        case GIMBAL_SEARCH_LEFT:
+            // 转移：看到目标 → TRACK
+            if (sys.value.camera_x != 0)
+            {
+                // gimbal_sm_obj.state = GIMBAL_TRACK;
+                // 从这里分流
+                // if (menu.cur_item == MENU_ITEM_TRACK_STATIC)
+                //     gimbal_sm_obj.state = GIMBAL_STATIC_TRACK;
+                // else
+                //     gimbal_sm_obj.state = GIMBAL_DYNAMIC_TRACK;
+
+                // if (menu.cur_item == MENU_ITEM_TRACK_DYNAMIC)
+                //     gimbal_sm_obj.state = GIMBAL_DYNAMIC_TRACK;
+                // else
+                //     gimbal_sm_obj.state = GIMBAL_STATIC_TRACK;
+
+                gimbal_sm_obj.state = GIMBAL_STATIC_TRACK;
+                break; // 这一 tick 不执行 SEARCH 动作，下 tick 走 TRACK
+            }
+            // 动作：匀速扫描 + 激光关
+            // ZhangDaTou_Speedctr(&yawmotor,
+            //                     80.0f * gimbal_sm_obj.scan_dir,
+            //                     2000);
+
+            // 速度模式
+            ZhangDaTou_Speedctr(&yawmotor, -80.0f, 2000);
+            ZhangDaTou_Control(&yawmotor);
+
+            // 速度位置模式
+            // ZhangDaTou_PositionSpeedctr(&yawmotor, 50, -180.0f, yawmotor.setAcc);
+            // ZhangDaTou_Control(&yawmotor);
+
+            HAL_GPIO_WritePin(laser_GPIO_Port, laser_Pin, GPIO_PIN_RESET);
+            break;
+
+        case GIMBAL_SEARCH_RIGHT:
+            // 转移：看到目标 → TRACK
+            if (sys.value.camera_x != 0)
+            {
+                // gimbal_sm_obj.state = GIMBAL_TRACK;
+                // 从这里分流
+                // if (menu.cur_item == MENU_ITEM_TRACK_STATIC)
+                //     gimbal_sm_obj.state = GIMBAL_STATIC_TRACK;
+                // else
+                //     gimbal_sm_obj.state = GIMBAL_DYNAMIC_TRACK;
+
+                // if (menu.cur_item == MENU_ITEM_TRACK_DYNAMIC)
+                //     gimbal_sm_obj.state = GIMBAL_DYNAMIC_TRACK;
+                // else
+                //     gimbal_sm_obj.state = GIMBAL_STATIC_TRACK;
+
+                gimbal_sm_obj.state = GIMBAL_STATIC_TRACK;
+                break; // 这一 tick 不执行 SEARCH 动作，下 tick 走 TRACK
+            }
+            // 动作：匀速扫描 + 激光关
+            // ZhangDaTou_Speedctr(&yawmotor,
+            //                     80.0f * gimbal_sm_obj.scan_dir,
+            //                     2000);
+
+            // 速度模式
+            ZhangDaTou_Speedctr(&yawmotor, +80.0f, 2000);
+            ZhangDaTou_Control(&yawmotor);
+
+            // 速度位置模式
+            // ZhangDaTou_PositionSpeedctr(&yawmotor, 50, +180.0f, yawmotor.setAcc);
+            // ZhangDaTou_Control(&yawmotor);
+
+            HAL_GPIO_WritePin(laser_GPIO_Port, laser_Pin, GPIO_PIN_RESET);
+            break;
+
+        case GIMBAL_STATIC_TRACK:
+            // 转移：丢失超过阈值 → SEARCH
+            // if (sys.value.camera_x == 0 && sys.value.camera_y == 0)
             // {
-            //     HAL_GPIO_WritePin(laser_GPIO_Port, laser_Pin, GPIO_PIN_RESET);
-            //     laser_on = 0;
+            //     if (target_lost_cnt >= LOST_BACK_TO_SEARCH_CNT)  // 如果target_lost_cnt等于零，证明有摄像头有数据，如果不等于零，就证明没有数据，那就跳回到扫靶状态
+            //     {
+            //         // gimbal_sm_obj.state = GIMBAL_SEARCH_LEFT;
+
+            //         if (menu.cur_item == MENU_ITEM_TRACK_STATIC_LEFT)
+            //             gimbal_sm_obj.state = GIMBAL_SEARCH_LEFT;
+            //         else
+            //             gimbal_sm_obj.state = GIMBAL_SEARCH_RIGHT;
+
+            //         HAL_GPIO_WritePin(laser_GPIO_Port, laser_Pin, GPIO_PIN_RESET);
+            //         stable_cnt = 0;
+            //         unstable_cnt = 0;
+            //         laser_on = 0;
+            //         break;
+            //     }
             // }
-        }
-        break;
+            // else
+            // {
+            //     target_lost_cnt = 0; // 有目标就清零
+            // }
 
-        // if(laser_on == 1 && menu.cur_item == MENU_ITEM_TRACK_STATIC)
-        // if(laser_on == 1)
-        // {
-        //     ZhangDaTou_Speedctr(&yawmotor, 0.0f, yawmotor.setAcc);
-        //     ZhangDaTou_Control(&yawmotor);
-        //     ZhangDaTou_Speedctr(&pitchmotor, 0.0f, pitchmotor.setAcc);
-        //     ZhangDaTou_Control(&pitchmotor);
-        // }
-        // else
-        // {
-        //     // 其他情况（动态模式 或 未瞄准稳定）→ 持续 PID
-        //     camera_x_pid_ctrl(&sys, 0.0f);
-        //     camera_y_pid_ctrl(&sys, 0.0f);
-        // }
+            // camera_x_pid_ctrl(&sys, 0.0f);
+            // camera_y_pid_ctrl(&sys, 0.0f);
 
-    default:
-        break;
+            // 激光控制：稳定够久才开，抖动够久才关
+            if (target_stable())
+            {
+                // unstable_cnt = 0;
+                if (stable_cnt < AIM_STABLE_CNT)
+                    stable_cnt++;
+                if (stable_cnt >= AIM_STABLE_CNT && !laser_on)
+                {
+                    HAL_GPIO_WritePin(laser_GPIO_Port, laser_Pin, GPIO_PIN_SET);
+                    laser_on = 1;
+
+                    // 锁定瞬间冻结目标位置（只在这一帧记录一次）
+                    // yawmotor.setPosition = yawmotor.Position;
+                    // pitchmotor.setPosition = pitchmotor.Position;
+
+                    // float yaw_lock_pos = yawmotor.Position;
+                    // float pitch_lock_pos = pitchmotor.Position;
+
+                    // // 用当前 PID 输出作为锁定补偿量
+                    // yawmotor.setPosition = yaw_lock_pos + sys.camera_x_pid.out_value;
+                    // pitchmotor.setPosition = pitch_lock_pos + sys.camera_y_pid.out_value;
+                }
+
+                // if (aim_stable_frames >= AIM_STABLE_FRAMES && !laser_on)
+                // {
+                //     HAL_GPIO_WritePin(laser_GPIO_Port, laser_Pin, GPIO_PIN_SET);
+                //     laser_on = 1;
+
+                //     // 锁定瞬间冻结目标位置（只在这一帧记录一次）
+                //     yawmotor.setPosition = yawmotor.Position;
+                //     pitchmotor.setPosition = pitchmotor.Position;
+                // }
+            }
+            else
+            {
+                stable_cnt = 0;
+                // if (unstable_cnt < AIM_UNSTABLE_CNT)
+                //     unstable_cnt++;
+                // if (unstable_cnt >= AIM_UNSTABLE_CNT && laser_on)
+                // {
+                //     HAL_GPIO_WritePin(laser_GPIO_Port, laser_Pin, GPIO_PIN_RESET);
+                //     laser_on = 0;
+                // }
+            }
+
+            // if(laser_on == 1 && menu.cur_item == MENU_ITEM_TRACK_STATIC)
+            if (laser_on)
+            {
+                // 速度模式
+                // ZhangDaTou_Speedctr(&yawmotor, 0.0f, yawmotor.setAcc);
+                // ZhangDaTou_Control(&yawmotor);
+                // ZhangDaTou_Speedctr(&pitchmotor, 0.0f, pitchmotor.setAcc);
+                // ZhangDaTou_Control(&pitchmotor);
+
+                // 速度位置模式
+                // ZhangDaTou_PositionSpeedctr(&yawmotor, yawmotor.setSpeed, 0.0f, yawmotor.setAcc);
+                // ZhangDaTou_Control(&yawmotor);
+                // ZhangDaTou_PositionSpeedctr(&pitchmotor, pitchmotor.setSpeed, 0.0f, pitchmotor.setAcc);
+                // ZhangDaTou_Control(&pitchmotor);
+
+                // 已锁定：保持锁定瞬间记录的位置，速度沿用配置的 setSpeed，PID 不跑
+                ZhangDaTou_PositionSpeedctr(&yawmotor, yawmotor.setSpeed, yawmotor.setPosition, yawmotor.setAcc);
+                ZhangDaTou_Control(&yawmotor);
+                ZhangDaTou_PositionSpeedctr(&pitchmotor, pitchmotor.setSpeed, pitchmotor.setPosition, pitchmotor.setAcc);
+                ZhangDaTou_Control(&pitchmotor);
+            }
+            else
+            {
+                // camera_x_pid_ctrl(&sys, 0.0f);
+                // camera_y_pid_ctrl(&sys, 0.0f);
+
+                gimbal_pid_ctrl_10ms();
+            }
+            break;
+
+        case GIMBAL_DYNAMIC_TRACK:
+            // 转移：丢失超过阈值 → SEARCH
+            // if (sys.value.camera_x == 0 && sys.value.camera_y == 0)
+            // {
+            //     if (target_lost_cnt >= LOST_BACK_TO_SEARCH_CNT)
+            //     {
+            //         gimbal_sm_obj.state = GIMBAL_SEARCH;
+            //         HAL_GPIO_WritePin(laser_GPIO_Port, laser_Pin, GPIO_PIN_RESET);
+            //         stable_cnt = 0;
+            //         unstable_cnt = 0;
+            //         laser_on = 0;
+            //         break;
+            //     }
+            // }
+            // else
+            // {
+            //     target_lost_cnt = 0; // 有目标就清零
+            // }
+
+            // camera_x_pid_ctrl(&sys, 0.0f);
+            // camera_y_pid_ctrl(&sys, 0.0f);
+
+            gimbal_pid_ctrl_10ms();
+
+            // 激光控制：稳定够久才开，抖动够久才关
+            if (target_stable())
+            {
+                // unstable_cnt = 0;
+                if (stable_cnt < AIM_STABLE_CNT)
+                    stable_cnt++;
+                if (stable_cnt >= AIM_STABLE_CNT && !laser_on)
+                {
+                    HAL_GPIO_WritePin(laser_GPIO_Port, laser_Pin, GPIO_PIN_SET);
+                    laser_on = 1;
+                }
+            }
+            else
+            {
+                stable_cnt = 0;
+                // if (unstable_cnt < AIM_UNSTABLE_CNT)
+                //     unstable_cnt++;
+                // if (unstable_cnt >= AIM_UNSTABLE_CNT && laser_on)
+                // {
+                //     HAL_GPIO_WritePin(laser_GPIO_Port, laser_Pin, GPIO_PIN_RESET);
+                //     laser_on = 0;
+                // }
+            }
+            break;
+
+            // if(laser_on == 1 && menu.cur_item == MENU_ITEM_TRACK_STATIC)
+            // if(laser_on == 1)
+            // {
+            //     ZhangDaTou_Speedctr(&yawmotor, 0.0f, yawmotor.setAcc);
+            //     ZhangDaTou_Control(&yawmotor);
+            //     ZhangDaTou_Speedctr(&pitchmotor, 0.0f, pitchmotor.setAcc);
+            //     ZhangDaTou_Control(&pitchmotor);
+            // }
+            // else
+            // {
+            //     // 其他情况（动态模式 或 未瞄准稳定）→ 持续 PID
+            //     camera_x_pid_ctrl(&sys, 0.0f);
+            //     camera_y_pid_ctrl(&sys, 0.0f);
+            // }
+
+        default:
+            break;
     }
 }

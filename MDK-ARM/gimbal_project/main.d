@@ -40,4 +40,3 @@ gimbal_project\main.o: ../user/app/common.h
 gimbal_project\main.o: D:\Software\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 gimbal_project\main.o: D:\Software\Keil_v5\ARM\ARMCC\Bin\..\include\stdbool.h
 gimbal_project\main.o: ../user/bsp/user_tim.h
-gimbal_project\main.o: ..\user\hardware\MPU9250\mpu9250_app.h

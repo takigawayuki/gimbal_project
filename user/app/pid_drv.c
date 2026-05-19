@@ -114,7 +114,7 @@ float parallel_pid_ctrl(pid_para_t *pid, float ref_value, float fdback_value)
             pid->i_term = pid->i_term_min;
     }
 
-    pid->out_value = pid->p_term + pid->i_term + pid->d_term;
+    pid->out_value = pid->p_term + pid->i_term + pid->d_term; 	// ²¢¼¶pid
 
     if (pid->out_value > pid->out_max)
         pid->out_value = pid->out_max;

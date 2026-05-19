@@ -1,5 +1,6 @@
 #include "user_usart.h"
 #include "ZhangDaTou.h"
+#include "common.h"
 #include <string.h>
 
 extern void camera_data_update(float dx, float dy);
@@ -44,6 +45,9 @@ static void ZDT_UART_RecoverReceive(UART_HandleTypeDef *huart)
 	{
 		dbg_uart1_error_cnt++;
 		ZDT_UART_StartReceive(&huart1, zdt_uart1_rx_buf);
+	} else if (huart->Instance == USART2)
+	{
+		CarSpeak_UART_RecoverReceive();
 	} else if (huart->Instance == USART3)
 	{
 		dbg_uart3_error_cnt++;
@@ -131,6 +135,7 @@ static void Vision_UART_ParseData(uint8_t *data, uint16_t size)
 void ZDT_UART_RxStart(void)
 {
 	ZDT_UART_StartReceive(&huart1, zdt_uart1_rx_buf);
+	CarSpeak_UART_RxStart();
 	ZDT_UART_StartReceive(&huart3, zdt_uart3_rx_buf);
 	ZDT_UART_StartReceive(&huart6, vision_uart6_rx_buf);
 }
@@ -142,6 +147,10 @@ void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
 	{
 		ZDT_UART_ParseFeedback(huart, zdt_uart1_rx_buf, Size);
 		ZDT_UART_StartReceive(&huart1, zdt_uart1_rx_buf);
+	} else if (huart->Instance == USART2)
+	{
+		CarSpeak_UART_ParseData(Size);
+		CarSpeak_UART_RxStart();
 	} else if (huart->Instance == USART3)
 	{
 		ZDT_UART_ParseFeedback(huart, zdt_uart3_rx_buf, Size);

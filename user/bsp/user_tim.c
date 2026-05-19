@@ -73,8 +73,16 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
         pitch_pos = ZhangDaTou_getPositionDate(&pitchmotor);
 
         // test
-        camera_x_pid_ctrl(&sys, 0.0f);
-        camera_y_pid_ctrl(&sys, 0.0f);
+        // camera_x_pid_ctrl(&sys, 0.0f);
+        // camera_y_pid_ctrl(&sys, 0.0f);
+
+        // static uint16_t pid_test_cnt = 0;
+        // if (++pid_test_cnt >= 20)
+        // {
+        //     pid_test_cnt = 0;
+        //     camera_x_pid_ctrl(&sys, 0.0f);
+        //     camera_y_pid_ctrl(&sys, 0.0f); 
+        // }   
 
         key_event_t ev_menu = key_update(&key_menu);
         key_event_t ev_enter = key_update(&key_enter);
@@ -93,7 +101,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 
         menu_update(ev_menu, ev_enter);
 
-        // gimbal_task_state(); // 每 1ms 执行一次
+        gimbal_task_state(); // 每 1ms 执行一次
 
 
     }

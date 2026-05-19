@@ -145,12 +145,24 @@ typedef struct
 
 typedef struct
 {
+  volatile float data_1;
+  volatile float data_2;
+  volatile float data_3;
+  volatile uint8_t flag;
+  volatile uint8_t frame_ok;
+  volatile uint16_t last_rx_size;
+  volatile uint32_t rx_count;
+  volatile uint32_t error_count;
+  volatile uint8_t raw[16];
+} car_speak_rx_t;
+
+typedef struct
+{
   period_t period;
   gimbal_value_t value;
   gimbal_ctrl_t ctrl;
   pid_para_t camera_y_pid;
   pid_para_t camera_x_pid;
-  pid_para_t xxx_pid;
 } sys_t;
 
 extern sys_t sys;
@@ -236,6 +248,7 @@ typedef struct
 
 
 extern menu_t menu;
+extern car_speak_rx_t car_speak_rx;
 
 
 /* ========== º¯ÊýÉùÃ÷ ========== */
@@ -261,6 +274,11 @@ void camera_data_update(float dx, float dy);
 void gimbal_init(void);
 void camera_y_pid_ctrl(sys_t *sys, float ref_value);
 void camera_x_pid_ctrl(sys_t *sys, float ref_value);
+
+/*** car_speak.c ***/
+void CarSpeak_UART_RxStart(void);
+void CarSpeak_UART_RecoverReceive(void);
+void CarSpeak_UART_ParseData(uint16_t size);
 
 /*** pid_drv.c ***/
 float parallel_pid_ctrl(pid_para_t *pid, float ref_value, float fdback_value);

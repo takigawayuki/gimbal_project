@@ -669,6 +669,11 @@
               <FilePath>..\user\app\menu.c</FilePath>
             </File>
             <File>
+              <FileName>car_speak.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\user\app\car_speak.c</FilePath>
+            </File>
+            <File>
               <FileName>common.h</FileName>
               <FileType>5</FileType>
               <FilePath>..\user\app\common.h</FilePath>
