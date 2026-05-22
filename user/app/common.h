@@ -5,6 +5,9 @@
 #include "string.h"
 #include <stdbool.h>
 
+#define ANGLE_TO_RAD  M_PI / 180.0f  // 角度转rad
+#define RAD_TO_ANGLE   180.0f / M_PI   
+
 /* ========== 数学运算宏 ========== */
 #define SIGN(x) (((x) < 0.0f) ? -1.0f : 1.0f) // 返回符号（-1 或 1）
 #define NORM2_f(x, y) (sqrtf(SQ(x) + SQ(y)))  // 二维向量二范数
@@ -70,6 +73,8 @@ typedef struct
   uint32_t sys_cnt;
   uint32_t camera_y_pid_cnt;
   uint32_t camera_x_pid_cnt;
+  uint32_t camera_y_pid_run_cnt;
+  uint32_t camera_x_pid_run_cnt;
 
   // 周期
   float sys_fs;
@@ -79,10 +84,17 @@ typedef struct
   float camera_x_pid_fs;
   float camera_x_pid_ts;
 
+  float camera_y_pid_run_fs;
+  float camera_y_pid_run_ts;
+  float camera_x_pid_run_fs;
+  float camera_x_pid_run_ts;
+
   // 计数值
   uint32_t sys_ts_cnt_val;
   uint32_t camera_y_pid_cnt_val;
   uint32_t camera_x_pid_cnt_val;
+  uint32_t camera_y_pid_cnt_run_val;
+  uint32_t camera_x_pid_cnt_run_val;
 
 } period_t;
 
@@ -131,8 +143,6 @@ typedef struct
   float gimbal_pitch;
   float gimbal_yaw;
 
-  float distance;
-
 } gimbal_value_t;
 
 typedef struct
@@ -143,6 +153,13 @@ typedef struct
   float camera_y_set;
 } gimbal_ctrl_t;
 
+
+/**
+***********************************************************************
+* @brief 小车云台通信结构体
+* @note
+***********************************************************************
+**/
 typedef struct
 {
   volatile float data_1;
@@ -156,6 +173,8 @@ typedef struct
   volatile uint8_t raw[16];
 } car_speak_rx_t;
 
+extern car_speak_rx_t car_speak_rx;
+
 typedef struct
 {
   period_t period;
@@ -163,6 +182,10 @@ typedef struct
   gimbal_ctrl_t ctrl;
   pid_para_t camera_y_pid;
   pid_para_t camera_x_pid;
+	
+	pid_para_t camera_y_pid_run;
+	pid_para_t camera_x_pid_run;
+	
 } sys_t;
 
 extern sys_t sys;
@@ -177,12 +200,13 @@ extern sys_t sys;
 // 云台状态机状态枚举
 typedef enum
 {
-  GIMBAL_IDLE = 0, // 待机，等待按键启动，电机停，激光关
+  GIMBAL_IDLE = 0, // 待机，等待按键启动，电机停，激光关  基础1
   // GIMBAL_SEARCH,   
-  GIMBAL_SEARCH_LEFT, 
-  GIMBAL_SEARCH_RIGHT,
-  GIMBAL_STATIC_TRACK,    
-  GIMBAL_DYNAMIC_TRACK, 
+  GIMBAL_SEARCH_LEFT,   // 基础2
+  GIMBAL_SEARCH_RIGHT,  // 基础2
+  GIMBAL_STATIC_TRACK,  // 基础2  
+  GIMBAL_DYNAMIC_TRACK,   // 基础3
+  GIMBAL_DYNAMIC_RUNNING,   // 发挥
 } gimbal_state;
 
 // 云台状态机变量
@@ -233,11 +257,12 @@ extern key_t key_enter; // PC3，用来确认/退出
 typedef enum
 {
   MENU_ITEM_STANDBY = 0,   // 待机（对应基础1）
-  // MENU_ITEM_TRACK_STATIC,  // 静态跟随（对应基础2、发挥1）
+  // MENU_ITEM_TRACK_STATIC,  // 静态跟随（对应基础2）
   MENU_ITEM_TRACK_STATIC_LEFT,    // ← 原 MENU_ITEM_TRACK_STATIC 改名/拆分
   MENU_ITEM_TRACK_STATIC_RIGHT,   // ← 新加
-  MENU_ITEM_TRACK_DYNAMIC, // 动态跟随（对应基础3、发挥2）
-  MENU_ITEM_COUNT          // 哨兵，方便循环取模
+  MENU_ITEM_TRACK_DYNAMIC, // 动态跟随（对应基础3）
+  MENU_ITEM_RUNNING_DYNAMIC,  // 发挥
+  MENU_ITEM_COUNT          // 循环菜单状态
 } menu_item_t;
 
 typedef struct
@@ -272,8 +297,14 @@ void camera_data_update(float dx, float dy);
 
 /*** gimbal_drv.c ***/
 void gimbal_init(void);
+
+void gimbal_pid_base_update_now(void);
+
 void camera_y_pid_ctrl(sys_t *sys, float ref_value);
 void camera_x_pid_ctrl(sys_t *sys, float ref_value);
+
+void camera_y_pid_run_ctrl(sys_t *sys, float ref_value);
+void camera_x_pid_run_ctrl(sys_t *sys, float ref_value);
 
 /*** car_speak.c ***/
 void CarSpeak_UART_RxStart(void);

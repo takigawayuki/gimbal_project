@@ -1,7 +1,7 @@
 Dependencies for Project 'gimbal_project', Target 'gimbal_project': (DO NOT MODIFY !)
 CompilerVersion: 5060960::V5.06 update 7 (build 960)::.\ARMCC
 F (startup_stm32f405xx.s)(0x6A099816)(--cpu Cortex-M4.fp.sp -g --apcs=interwork -I.\RTE\_gimbal_project-ID:\Software\Arm\Packs\ARM\CMSIS\5.7.0\CMSIS\Core\Include-ID:\Software\Arm\Packs\Keil\STM32F4xx_DFP\2.17.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include--pd "__UVISION_VERSION SETA 532" --pd "_RTE_ SETA 1" --pd "STM32F405xx SETA 1" --pd "_RTE_ SETA 1"--list startup_stm32f405xx.lst --xref -o gimbal_project\startup_stm32f405xx.o --depend gimbal_project\startup_stm32f405xx.d)
-F (../Core/Src/main.c)(0x6A0AD4A9)(--c99 -c --cpu Cortex-M4.fp.sp -g -O0 --apcs=interwork --split_sections -I ../Core/Inc -I C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/STM32F4xx_HAL_Driver/Inc -I C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/CMSIS/Device/ST/STM32F4xx/Include -I C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/CMSIS/Include -I ../user/hardware/42 -I ..\user\hardware\MPU9250\eMPL -I ..\user\hardware\MPU9250 -I ../user/bsp -I ../user/app-I.\RTE\_gimbal_project-ID:\Software\Arm\Packs\ARM\CMSIS\5.7.0\CMSIS\Core\Include-ID:\Software\Arm\Packs\Keil\STM32F4xx_DFP\2.17.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="532" -D_RTE_ -DSTM32F405xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F405xx-o gimbal_project\main.o --omf_browse gimbal_project\main.crf --depend gimbal_project\main.d)
+F (../Core/Src/main.c)(0x6A101F28)(--c99 -c --cpu Cortex-M4.fp.sp -g -O0 --apcs=interwork --split_sections -I ../Core/Inc -I C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/STM32F4xx_HAL_Driver/Inc -I C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/CMSIS/Device/ST/STM32F4xx/Include -I C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/CMSIS/Include -I ../user/hardware/42 -I ..\user\hardware\MPU9250\eMPL -I ..\user\hardware\MPU9250 -I ../user/bsp -I ../user/app-I.\RTE\_gimbal_project-ID:\Software\Arm\Packs\ARM\CMSIS\5.7.0\CMSIS\Core\Include-ID:\Software\Arm\Packs\Keil\STM32F4xx_DFP\2.17.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="532" -D_RTE_ -DSTM32F405xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F405xx-o gimbal_project\main.o --omf_browse gimbal_project\main.crf --depend gimbal_project\main.d)
 I (../Core/Inc/main.h)(0x6A032298)
 I (C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h)(0x69F027DD)
 I (../Core/Inc/stm32f4xx_hal_conf.h)(0x69F203B8)
@@ -38,7 +38,7 @@ I (../Core/Inc/tim.h)(0x6A032298)
 I (../Core/Inc/usart.h)(0x6A099813)
 I (../Core/Inc/gpio.h)(0x69F203B6)
 I (../user/hardware/42/ZhangDaTou.h)(0x69F71E97)
-I (../user/app/common.h)(0x6A0B08AF)
+I (../user/app/common.h)(0x6A1027B6)
 I (D:\Software\Keil_v5\ARM\ARMCC\include\string.h)(0x5F63878A)
 I (D:\Software\Keil_v5\ARM\ARMCC\include\stdbool.h)(0x5F63877C)
 I (../user/bsp/user_tim.h)(0x69F4AE77)
@@ -766,7 +766,7 @@ I (C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/STM32F4x
 I (C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h)(0x69F027DD)
 I (C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h)(0x69F027DD)
 I (C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h)(0x69F027DD)
-F (..\user\bsp\user_tim.c)(0x6A0B1E34)(--c99 -c --cpu Cortex-M4.fp.sp -g -O0 --apcs=interwork --split_sections -I ../Core/Inc -I C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/STM32F4xx_HAL_Driver/Inc -I C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/CMSIS/Device/ST/STM32F4xx/Include -I C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/CMSIS/Include -I ../user/hardware/42 -I ..\user\hardware\MPU9250\eMPL -I ..\user\hardware\MPU9250 -I ../user/bsp -I ../user/app-I.\RTE\_gimbal_project-ID:\Software\Arm\Packs\ARM\CMSIS\5.7.0\CMSIS\Core\Include-ID:\Software\Arm\Packs\Keil\STM32F4xx_DFP\2.17.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="532" -D_RTE_ -DSTM32F405xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F405xx-o gimbal_project\user_tim.o --omf_browse gimbal_project\user_tim.crf --depend gimbal_project\user_tim.d)
+F (..\user\bsp\user_tim.c)(0x6A1022BD)(--c99 -c --cpu Cortex-M4.fp.sp -g -O0 --apcs=interwork --split_sections -I ../Core/Inc -I C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/STM32F4xx_HAL_Driver/Inc -I C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/CMSIS/Device/ST/STM32F4xx/Include -I C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/CMSIS/Include -I ../user/hardware/42 -I ..\user\hardware\MPU9250\eMPL -I ..\user\hardware\MPU9250 -I ../user/bsp -I ../user/app-I.\RTE\_gimbal_project-ID:\Software\Arm\Packs\ARM\CMSIS\5.7.0\CMSIS\Core\Include-ID:\Software\Arm\Packs\Keil\STM32F4xx_DFP\2.17.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="532" -D_RTE_ -DSTM32F405xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F405xx-o gimbal_project\user_tim.o --omf_browse gimbal_project\user_tim.crf --depend gimbal_project\user_tim.d)
 I (..\user\bsp\user_tim.h)(0x69F4AE77)
 I (../Core/Inc/main.h)(0x6A032298)
 I (C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h)(0x69F027DD)
@@ -799,7 +799,7 @@ I (C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/STM32F4x
 I (C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h)(0x69F027DD)
 I (C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h)(0x69F027DD)
 I (C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h)(0x69F027DD)
-I (../user/app/common.h)(0x6A0B08AF)
+I (../user/app/common.h)(0x6A1027B6)
 I (D:\Software\Keil_v5\ARM\ARMCC\include\string.h)(0x5F63878A)
 I (D:\Software\Keil_v5\ARM\ARMCC\include\stdbool.h)(0x5F63877C)
 I (../user/hardware/42/ZhangDaTou.h)(0x69F71E97)
@@ -840,11 +840,11 @@ I (C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/STM32F4x
 I (C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h)(0x69F027DD)
 I (../user/hardware/42/ZhangDaTou.h)(0x69F71E97)
 I (../Core/Inc/usart.h)(0x6A099813)
-I (../user/app/common.h)(0x6A0B08AF)
+I (../user/app/common.h)(0x6A1027B6)
 I (D:\Software\Keil_v5\ARM\ARMCC\include\string.h)(0x5F63878A)
 I (D:\Software\Keil_v5\ARM\ARMCC\include\stdbool.h)(0x5F63877C)
 F (..\user\bsp\user_usart.h)(0x6A099C94)()
-F (..\user\hardware\42\ZhangDaTou.c)(0x6A086665)(--c99 -c --cpu Cortex-M4.fp.sp -g -O0 --apcs=interwork --split_sections -I ../Core/Inc -I C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/STM32F4xx_HAL_Driver/Inc -I C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/CMSIS/Device/ST/STM32F4xx/Include -I C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/CMSIS/Include -I ../user/hardware/42 -I ..\user\hardware\MPU9250\eMPL -I ..\user\hardware\MPU9250 -I ../user/bsp -I ../user/app-I.\RTE\_gimbal_project-ID:\Software\Arm\Packs\ARM\CMSIS\5.7.0\CMSIS\Core\Include-ID:\Software\Arm\Packs\Keil\STM32F4xx_DFP\2.17.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="532" -D_RTE_ -DSTM32F405xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F405xx-o gimbal_project\zhangdatou.o --omf_browse gimbal_project\zhangdatou.crf --depend gimbal_project\zhangdatou.d)
+F (..\user\hardware\42\ZhangDaTou.c)(0x6A10241F)(--c99 -c --cpu Cortex-M4.fp.sp -g -O0 --apcs=interwork --split_sections -I ../Core/Inc -I C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/STM32F4xx_HAL_Driver/Inc -I C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/CMSIS/Device/ST/STM32F4xx/Include -I C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/CMSIS/Include -I ../user/hardware/42 -I ..\user\hardware\MPU9250\eMPL -I ..\user\hardware\MPU9250 -I ../user/bsp -I ../user/app-I.\RTE\_gimbal_project-ID:\Software\Arm\Packs\ARM\CMSIS\5.7.0\CMSIS\Core\Include-ID:\Software\Arm\Packs\Keil\STM32F4xx_DFP\2.17.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="532" -D_RTE_ -DSTM32F405xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F405xx-o gimbal_project\zhangdatou.o --omf_browse gimbal_project\zhangdatou.crf --depend gimbal_project\zhangdatou.d)
 I (..\user\hardware\42\ZhangDaTou.h)(0x69F71E97)
 I (../Core/Inc/main.h)(0x6A032298)
 I (C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h)(0x69F027DD)
@@ -988,7 +988,7 @@ I (C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/STM32F4x
 I (C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h)(0x69F027DD)
 I (C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h)(0x69F027DD)
 I (C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h)(0x69F027DD)
-I (../user/app/common.h)(0x6A0B08AF)
+I (../user/app/common.h)(0x6A1027B6)
 I (D:\Software\Keil_v5\ARM\ARMCC\include\string.h)(0x5F63878A)
 I (D:\Software\Keil_v5\ARM\ARMCC\include\stdbool.h)(0x5F63877C)
 I (..\user\hardware\MPU9250\eMPL\inv_mpu.h)(0x653362D6)
@@ -1116,8 +1116,8 @@ I (..\user\hardware\MPU9250\eMPL\dmpKey.h)(0x50CA9A0E)
 I (..\user\hardware\MPU9250\eMPL\dmpmap.h)(0x50CA9A0E)
 I (../Core/Inc/tim.h)(0x6A032298)
 F (..\user\hardware\MPU9250\eMPL\inv_mpu_dmp_motion_driver.h)(0x50CA9A0E)()
-F (..\user\app\gimbal_ctrl.c)(0x6A0B248C)(--c99 -c --cpu Cortex-M4.fp.sp -g -O0 --apcs=interwork --split_sections -I ../Core/Inc -I C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/STM32F4xx_HAL_Driver/Inc -I C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/CMSIS/Device/ST/STM32F4xx/Include -I C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/CMSIS/Include -I ../user/hardware/42 -I ..\user\hardware\MPU9250\eMPL -I ..\user\hardware\MPU9250 -I ../user/bsp -I ../user/app-I.\RTE\_gimbal_project-ID:\Software\Arm\Packs\ARM\CMSIS\5.7.0\CMSIS\Core\Include-ID:\Software\Arm\Packs\Keil\STM32F4xx_DFP\2.17.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="532" -D_RTE_ -DSTM32F405xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F405xx-o gimbal_project\gimbal_ctrl.o --omf_browse gimbal_project\gimbal_ctrl.crf --depend gimbal_project\gimbal_ctrl.d)
-I (..\user\app\common.h)(0x6A0B08AF)
+F (..\user\app\gimbal_ctrl.c)(0x6A103CF0)(--c99 -c --cpu Cortex-M4.fp.sp -g -O0 --apcs=interwork --split_sections -I ../Core/Inc -I C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/STM32F4xx_HAL_Driver/Inc -I C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/CMSIS/Device/ST/STM32F4xx/Include -I C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/CMSIS/Include -I ../user/hardware/42 -I ..\user\hardware\MPU9250\eMPL -I ..\user\hardware\MPU9250 -I ../user/bsp -I ../user/app-I.\RTE\_gimbal_project-ID:\Software\Arm\Packs\ARM\CMSIS\5.7.0\CMSIS\Core\Include-ID:\Software\Arm\Packs\Keil\STM32F4xx_DFP\2.17.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="532" -D_RTE_ -DSTM32F405xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F405xx-o gimbal_project\gimbal_ctrl.o --omf_browse gimbal_project\gimbal_ctrl.crf --depend gimbal_project\gimbal_ctrl.d)
+I (..\user\app\common.h)(0x6A1027B6)
 I (../Core/Inc/main.h)(0x6A032298)
 I (C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h)(0x69F027DD)
 I (../Core/Inc/stm32f4xx_hal_conf.h)(0x69F203B8)
@@ -1154,8 +1154,8 @@ I (D:\Software\Keil_v5\ARM\ARMCC\include\stdbool.h)(0x5F63877C)
 I (../user/hardware/42/ZhangDaTou.h)(0x69F71E97)
 I (../Core/Inc/usart.h)(0x6A099813)
 I (D:\Software\Keil_v5\ARM\ARMCC\include\math.h)(0x5F63877C)
-F (..\user\app\gimbal_calc.c)(0x6A082803)(--c99 -c --cpu Cortex-M4.fp.sp -g -O0 --apcs=interwork --split_sections -I ../Core/Inc -I C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/STM32F4xx_HAL_Driver/Inc -I C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/CMSIS/Device/ST/STM32F4xx/Include -I C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/CMSIS/Include -I ../user/hardware/42 -I ..\user\hardware\MPU9250\eMPL -I ..\user\hardware\MPU9250 -I ../user/bsp -I ../user/app-I.\RTE\_gimbal_project-ID:\Software\Arm\Packs\ARM\CMSIS\5.7.0\CMSIS\Core\Include-ID:\Software\Arm\Packs\Keil\STM32F4xx_DFP\2.17.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="532" -D_RTE_ -DSTM32F405xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F405xx-o gimbal_project\gimbal_calc.o --omf_browse gimbal_project\gimbal_calc.crf --depend gimbal_project\gimbal_calc.d)
-I (..\user\app\common.h)(0x6A0B08AF)
+F (..\user\app\gimbal_calc.c)(0x6A0C5A2F)(--c99 -c --cpu Cortex-M4.fp.sp -g -O0 --apcs=interwork --split_sections -I ../Core/Inc -I C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/STM32F4xx_HAL_Driver/Inc -I C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/CMSIS/Device/ST/STM32F4xx/Include -I C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/CMSIS/Include -I ../user/hardware/42 -I ..\user\hardware\MPU9250\eMPL -I ..\user\hardware\MPU9250 -I ../user/bsp -I ../user/app-I.\RTE\_gimbal_project-ID:\Software\Arm\Packs\ARM\CMSIS\5.7.0\CMSIS\Core\Include-ID:\Software\Arm\Packs\Keil\STM32F4xx_DFP\2.17.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="532" -D_RTE_ -DSTM32F405xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F405xx-o gimbal_project\gimbal_calc.o --omf_browse gimbal_project\gimbal_calc.crf --depend gimbal_project\gimbal_calc.d)
+I (..\user\app\common.h)(0x6A1027B6)
 I (../Core/Inc/main.h)(0x6A032298)
 I (C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h)(0x69F027DD)
 I (../Core/Inc/stm32f4xx_hal_conf.h)(0x69F203B8)
@@ -1190,8 +1190,8 @@ I (C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/STM32F4x
 I (D:\Software\Keil_v5\ARM\ARMCC\include\string.h)(0x5F63878A)
 I (D:\Software\Keil_v5\ARM\ARMCC\include\stdbool.h)(0x5F63877C)
 I (D:\Software\Keil_v5\ARM\ARMCC\include\math.h)(0x5F63877C)
-F (..\user\app\gimbal_drv.c)(0x6A0B21CB)(--c99 -c --cpu Cortex-M4.fp.sp -g -O0 --apcs=interwork --split_sections -I ../Core/Inc -I C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/STM32F4xx_HAL_Driver/Inc -I C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/CMSIS/Device/ST/STM32F4xx/Include -I C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/CMSIS/Include -I ../user/hardware/42 -I ..\user\hardware\MPU9250\eMPL -I ..\user\hardware\MPU9250 -I ../user/bsp -I ../user/app-I.\RTE\_gimbal_project-ID:\Software\Arm\Packs\ARM\CMSIS\5.7.0\CMSIS\Core\Include-ID:\Software\Arm\Packs\Keil\STM32F4xx_DFP\2.17.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="532" -D_RTE_ -DSTM32F405xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F405xx-o gimbal_project\gimbal_drv.o --omf_browse gimbal_project\gimbal_drv.crf --depend gimbal_project\gimbal_drv.d)
-I (..\user\app\common.h)(0x6A0B08AF)
+F (..\user\app\gimbal_drv.c)(0x6A10408E)(--c99 -c --cpu Cortex-M4.fp.sp -g -O0 --apcs=interwork --split_sections -I ../Core/Inc -I C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/STM32F4xx_HAL_Driver/Inc -I C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/CMSIS/Device/ST/STM32F4xx/Include -I C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/CMSIS/Include -I ../user/hardware/42 -I ..\user\hardware\MPU9250\eMPL -I ..\user\hardware\MPU9250 -I ../user/bsp -I ../user/app-I.\RTE\_gimbal_project-ID:\Software\Arm\Packs\ARM\CMSIS\5.7.0\CMSIS\Core\Include-ID:\Software\Arm\Packs\Keil\STM32F4xx_DFP\2.17.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="532" -D_RTE_ -DSTM32F405xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F405xx-o gimbal_project\gimbal_drv.o --omf_browse gimbal_project\gimbal_drv.crf --depend gimbal_project\gimbal_drv.d)
+I (..\user\app\common.h)(0x6A1027B6)
 I (../Core/Inc/main.h)(0x6A032298)
 I (C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h)(0x69F027DD)
 I (../Core/Inc/stm32f4xx_hal_conf.h)(0x69F203B8)
@@ -1228,7 +1228,7 @@ I (D:\Software\Keil_v5\ARM\ARMCC\include\stdbool.h)(0x5F63877C)
 I (../user/hardware/42/ZhangDaTou.h)(0x69F71E97)
 I (../Core/Inc/usart.h)(0x6A099813)
 F (..\user\app\pid_drv.c)(0x6A0AD638)(--c99 -c --cpu Cortex-M4.fp.sp -g -O0 --apcs=interwork --split_sections -I ../Core/Inc -I C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/STM32F4xx_HAL_Driver/Inc -I C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/CMSIS/Device/ST/STM32F4xx/Include -I C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/CMSIS/Include -I ../user/hardware/42 -I ..\user\hardware\MPU9250\eMPL -I ..\user\hardware\MPU9250 -I ../user/bsp -I ../user/app-I.\RTE\_gimbal_project-ID:\Software\Arm\Packs\ARM\CMSIS\5.7.0\CMSIS\Core\Include-ID:\Software\Arm\Packs\Keil\STM32F4xx_DFP\2.17.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="532" -D_RTE_ -DSTM32F405xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F405xx-o gimbal_project\pid_drv_1.o --omf_browse gimbal_project\pid_drv_1.crf --depend gimbal_project\pid_drv_1.d)
-I (..\user\app\common.h)(0x6A0B08AF)
+I (..\user\app\common.h)(0x6A1027B6)
 I (../Core/Inc/main.h)(0x6A032298)
 I (C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h)(0x69F027DD)
 I (../Core/Inc/stm32f4xx_hal_conf.h)(0x69F203B8)
@@ -1263,7 +1263,7 @@ I (C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/STM32F4x
 I (D:\Software\Keil_v5\ARM\ARMCC\include\string.h)(0x5F63878A)
 I (D:\Software\Keil_v5\ARM\ARMCC\include\stdbool.h)(0x5F63877C)
 F (..\user\app\key.c)(0x6A046D97)(--c99 -c --cpu Cortex-M4.fp.sp -g -O0 --apcs=interwork --split_sections -I ../Core/Inc -I C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/STM32F4xx_HAL_Driver/Inc -I C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/CMSIS/Device/ST/STM32F4xx/Include -I C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/CMSIS/Include -I ../user/hardware/42 -I ..\user\hardware\MPU9250\eMPL -I ..\user\hardware\MPU9250 -I ../user/bsp -I ../user/app-I.\RTE\_gimbal_project-ID:\Software\Arm\Packs\ARM\CMSIS\5.7.0\CMSIS\Core\Include-ID:\Software\Arm\Packs\Keil\STM32F4xx_DFP\2.17.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="532" -D_RTE_ -DSTM32F405xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F405xx-o gimbal_project\key.o --omf_browse gimbal_project\key.crf --depend gimbal_project\key.d)
-I (..\user\app\common.h)(0x6A0B08AF)
+I (..\user\app\common.h)(0x6A1027B6)
 I (../Core/Inc/main.h)(0x6A032298)
 I (C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h)(0x69F027DD)
 I (../Core/Inc/stm32f4xx_hal_conf.h)(0x69F203B8)
@@ -1297,8 +1297,8 @@ I (C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/STM32F4x
 I (C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h)(0x69F027DD)
 I (D:\Software\Keil_v5\ARM\ARMCC\include\string.h)(0x5F63878A)
 I (D:\Software\Keil_v5\ARM\ARMCC\include\stdbool.h)(0x5F63877C)
-F (..\user\app\menu.c)(0x6A047CD8)(--c99 -c --cpu Cortex-M4.fp.sp -g -O0 --apcs=interwork --split_sections -I ../Core/Inc -I C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/STM32F4xx_HAL_Driver/Inc -I C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/CMSIS/Device/ST/STM32F4xx/Include -I C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/CMSIS/Include -I ../user/hardware/42 -I ..\user\hardware\MPU9250\eMPL -I ..\user\hardware\MPU9250 -I ../user/bsp -I ../user/app-I.\RTE\_gimbal_project-ID:\Software\Arm\Packs\ARM\CMSIS\5.7.0\CMSIS\Core\Include-ID:\Software\Arm\Packs\Keil\STM32F4xx_DFP\2.17.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="532" -D_RTE_ -DSTM32F405xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F405xx-o gimbal_project\menu.o --omf_browse gimbal_project\menu.crf --depend gimbal_project\menu.d)
-I (..\user\app\common.h)(0x6A0B08AF)
+F (..\user\app\menu.c)(0x6A0C769F)(--c99 -c --cpu Cortex-M4.fp.sp -g -O0 --apcs=interwork --split_sections -I ../Core/Inc -I C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/STM32F4xx_HAL_Driver/Inc -I C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/CMSIS/Device/ST/STM32F4xx/Include -I C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/CMSIS/Include -I ../user/hardware/42 -I ..\user\hardware\MPU9250\eMPL -I ..\user\hardware\MPU9250 -I ../user/bsp -I ../user/app-I.\RTE\_gimbal_project-ID:\Software\Arm\Packs\ARM\CMSIS\5.7.0\CMSIS\Core\Include-ID:\Software\Arm\Packs\Keil\STM32F4xx_DFP\2.17.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="532" -D_RTE_ -DSTM32F405xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F405xx-o gimbal_project\menu.o --omf_browse gimbal_project\menu.crf --depend gimbal_project\menu.d)
+I (..\user\app\common.h)(0x6A1027B6)
 I (../Core/Inc/main.h)(0x6A032298)
 I (C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h)(0x69F027DD)
 I (../Core/Inc/stm32f4xx_hal_conf.h)(0x69F203B8)
@@ -1332,8 +1332,8 @@ I (C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/STM32F4x
 I (C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_uart.h)(0x69F027DD)
 I (D:\Software\Keil_v5\ARM\ARMCC\include\string.h)(0x5F63878A)
 I (D:\Software\Keil_v5\ARM\ARMCC\include\stdbool.h)(0x5F63877C)
-F (..\user\app\car_speak.c)(0x6A0B2DA5)(--c99 -c --cpu Cortex-M4.fp.sp -g -O0 --apcs=interwork --split_sections -I ../Core/Inc -I C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/STM32F4xx_HAL_Driver/Inc -I C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/CMSIS/Device/ST/STM32F4xx/Include -I C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/CMSIS/Include -I ../user/hardware/42 -I ..\user\hardware\MPU9250\eMPL -I ..\user\hardware\MPU9250 -I ../user/bsp -I ../user/app-I.\RTE\_gimbal_project-ID:\Software\Arm\Packs\ARM\CMSIS\5.7.0\CMSIS\Core\Include-ID:\Software\Arm\Packs\Keil\STM32F4xx_DFP\2.17.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="532" -D_RTE_ -DSTM32F405xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F405xx-o gimbal_project\car_speak.o --omf_browse gimbal_project\car_speak.crf --depend gimbal_project\car_speak.d)
-I (..\user\app\common.h)(0x6A0B08AF)
+F (..\user\app\car_speak.c)(0x6A0C56A0)(--c99 -c --cpu Cortex-M4.fp.sp -g -O0 --apcs=interwork --split_sections -I ../Core/Inc -I C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/STM32F4xx_HAL_Driver/Inc -I C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/STM32F4xx_HAL_Driver/Inc/Legacy -I C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/CMSIS/Device/ST/STM32F4xx/Include -I C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/CMSIS/Include -I ../user/hardware/42 -I ..\user\hardware\MPU9250\eMPL -I ..\user\hardware\MPU9250 -I ../user/bsp -I ../user/app-I.\RTE\_gimbal_project-ID:\Software\Arm\Packs\ARM\CMSIS\5.7.0\CMSIS\Core\Include-ID:\Software\Arm\Packs\Keil\STM32F4xx_DFP\2.17.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include-D__UVISION_VERSION="532" -D_RTE_ -DSTM32F405xx -D_RTE_ -DUSE_HAL_DRIVER -DSTM32F405xx-o gimbal_project\car_speak.o --omf_browse gimbal_project\car_speak.crf --depend gimbal_project\car_speak.d)
+I (..\user\app\common.h)(0x6A1027B6)
 I (../Core/Inc/main.h)(0x6A032298)
 I (C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h)(0x69F027DD)
 I (../Core/Inc/stm32f4xx_hal_conf.h)(0x69F203B8)
@@ -1368,4 +1368,4 @@ I (C:/Users/Y9000P/STM32Cube/Repository/STM32Cube_FW_F4_V1.28.3/Drivers/STM32F4x
 I (D:\Software\Keil_v5\ARM\ARMCC\include\string.h)(0x5F63878A)
 I (D:\Software\Keil_v5\ARM\ARMCC\include\stdbool.h)(0x5F63877C)
 I (../user/bsp/user_usart.h)(0x6A099C94)
-F (..\user\app\common.h)(0x6A0B08AF)()
+F (..\user\app\common.h)(0x6A1027B6)()

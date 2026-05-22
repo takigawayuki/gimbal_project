@@ -29,6 +29,10 @@ uint8_t laser_on = 0;
 
 extern float yaw_pos;
 
+// 给发挥题判断用的
+#define AIM_CENTER_X_ERR  3.0f
+#define AIM_CENTER_Y_ERR  3.0f
+
 /*** Key Scan ***/
 // uint8_t key_1 = 0;
 // #define KEY_ON 1
@@ -80,7 +84,34 @@ static void gimbal_pid_ctrl_10ms(void)
         pid_test_cnt = 0;
         camera_x_pid_ctrl(&sys, 0.0f);
         camera_y_pid_ctrl(&sys, 0.0f);
+        // camera_x_pid_run_ctrl(&sys, 0.0f);
+        // camera_y_pid_run_ctrl(&sys, 0.0f);
+
     }
+}
+
+static void gimbal_pid_ctrl_run_10ms(void)
+{
+
+    static uint16_t pid_test_cnt = 0;
+
+    if (++pid_test_cnt >= 10)
+    {
+        pid_test_cnt = 0;
+        // camera_x_pid_ctrl(&sys, 0.0f);
+        // camera_y_pid_ctrl(&sys, 0.0f);
+        camera_x_pid_run_ctrl(&sys, 0.0f);
+        camera_y_pid_run_ctrl(&sys, 0.0f);
+
+    }
+
+}
+
+
+static void gimbal_pid_ctrl_run_1ms(void)
+{
+    camera_x_pid_run_ctrl(&sys, 0.0f);
+    camera_y_pid_run_ctrl(&sys, 0.0f);
 }
 
 // /*** 切换状态 ***/
@@ -394,7 +425,7 @@ void gimbal_task_state(void)
             //                     2000);
 
             // 速度模式
-            ZhangDaTou_Speedctr(&yawmotor, -80.0f, 2000);
+            ZhangDaTou_Speedctr(&yawmotor, -100.0f, 2000);
             ZhangDaTou_Control(&yawmotor);
 
             // 速度位置模式
@@ -429,7 +460,7 @@ void gimbal_task_state(void)
             //                     2000);
 
             // 速度模式
-            ZhangDaTou_Speedctr(&yawmotor, +80.0f, 2000);
+            ZhangDaTou_Speedctr(&yawmotor, +100.0f, 2000);
             ZhangDaTou_Control(&yawmotor);
 
             // 速度位置模式
@@ -605,6 +636,41 @@ void gimbal_task_state(void)
             //     camera_x_pid_ctrl(&sys, 0.0f);
             //     camera_y_pid_ctrl(&sys, 0.0f);
             // }
+
+        case GIMBAL_DYNAMIC_RUNNING:
+            gimbal_pid_ctrl_run_10ms();	
+            // gimbal_pid_ctrl_run_1ms();
+
+            // if (fabsf(sys.value.camera_x) < AIM_CENTER_X_ERR &&
+            //     fabsf(sys.value.camera_y) < AIM_CENTER_Y_ERR)
+            // {
+            //     gimbal_pid_base_update_now();
+
+            //     sys.camera_x_pid_run.out_value = 0.0f;
+            //     sys.camera_y_pid_run.out_value = 0.0f;
+            //     sys.camera_x_pid_run.i_term = 0.0f;
+            //     sys.camera_y_pid_run.i_term = 0.0f;
+            // }
+            // else
+            // {
+            //     gimbal_pid_ctrl_run_10ms();
+            // }
+
+            if (target_stable())
+            {
+                if (stable_cnt < AIM_STABLE_CNT)
+                    stable_cnt++;
+                if (stable_cnt >= AIM_STABLE_CNT && !laser_on)
+                {
+                    HAL_GPIO_WritePin(laser_GPIO_Port, laser_Pin, GPIO_PIN_SET);
+                    laser_on = 1;
+                }
+            }
+            else
+            {
+                stable_cnt = 0;
+            }
+            break;
 
         default:
             break;

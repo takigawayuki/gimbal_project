@@ -26,6 +26,4 @@ void camera_data_update(float dx, float dy)
     {
         aim_stable_frames = 0;
     }
-
-
 }

@@ -61,6 +61,10 @@ void Error_Handler(void);
 #define text_io_GPIO_Port GPIOC
 #define laser_Pin GPIO_PIN_14
 #define laser_GPIO_Port GPIOC
+#define OLED_SCL_Pin GPIO_PIN_0
+#define OLED_SCL_GPIO_Port GPIOC
+#define OLED_SDA_Pin GPIO_PIN_2
+#define OLED_SDA_GPIO_Port GPIOC
 #define key2_Pin GPIO_PIN_3
 #define key2_GPIO_Port GPIOC
 #define key1_Pin GPIO_PIN_4

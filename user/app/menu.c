@@ -31,22 +31,26 @@ void menu_update(key_event_t ev_menu, key_event_t ev_enter)
                     break;
 
                 // case MENU_ITEM_TRACK_STATIC:
-                case MENU_ITEM_TRACK_STATIC_LEFT:
+                case MENU_ITEM_TRACK_STATIC_LEFT:   // »ù´¡2
                     // gimbal_sm_obj.scan_dir = -1;          // Íù×óÉ¨
                     // gimbal_sm_obj.state = GIMBAL_SEARCH;
                     gimbal_sm_obj.state = GIMBAL_SEARCH_LEFT;
                     break;
 
-                case MENU_ITEM_TRACK_STATIC_RIGHT:
+                case MENU_ITEM_TRACK_STATIC_RIGHT:  // »ù´¡2
                     // gimbal_sm_obj.scan_dir = 1;           // ÍùÓÒÉ¨
                     // gimbal_sm_obj.state = GIMBAL_SEARCH;
                     gimbal_sm_obj.state = GIMBAL_SEARCH_RIGHT;
                     break;
 
-                case MENU_ITEM_TRACK_DYNAMIC:
+                case MENU_ITEM_TRACK_DYNAMIC:       // »ù´¡3
                     // gimbal_sm_obj.state = GIMBAL_SEARCH;
                     // gimbal_sm_obj.scan_dir = -1; 
                     gimbal_sm_obj.state = GIMBAL_DYNAMIC_TRACK;
+                    break;
+
+                case MENU_ITEM_RUNNING_DYNAMIC:     // ·¢»Ó
+                    gimbal_sm_obj.state = GIMBAL_DYNAMIC_RUNNING;
                     break;
 
                 default:

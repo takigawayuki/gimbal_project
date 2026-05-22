@@ -84,6 +84,9 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
         //     camera_y_pid_ctrl(&sys, 0.0f); 
         // }   
 
+        // camera_x_pid_run_ctrl(&sys, 0.0f);
+        // camera_y_pid_run_ctrl(&sys, 0.0f);
+
         key_event_t ev_menu = key_update(&key_menu);
         key_event_t ev_enter = key_update(&key_enter);
 

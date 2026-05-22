@@ -130,6 +130,7 @@ int main(void)
 
   key_init();
   menu_init();
+//	yawmotor.setSpeed = 0;
 
   User_TIM_Init();
 
